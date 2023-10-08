@@ -1,7 +1,7 @@
 package com.example.extraservice.controllers;
 
+import com.example.extraservice.model.request.StarShipCreateDto;
 import com.example.extraservice.services.StarShipService;
-import model.request.StarShipCreateDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

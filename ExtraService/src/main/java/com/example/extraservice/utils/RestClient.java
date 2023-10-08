@@ -1,9 +1,9 @@
 package com.example.extraservice.utils;
 
-import model.request.SpaceMarineBuildDto;
-import model.request.StarShipCreateDto;
-import model.response.ListSpaceMarine;
-import model.response.SpaceMarineResponseDto;
+import com.example.extraservice.model.request.SpaceMarineBuildDto;
+import com.example.extraservice.model.request.StarShipCreateDto;
+import com.example.extraservice.model.response.ListSpaceMarine;
+import com.example.extraservice.model.response.SpaceMarineResponseDto;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;

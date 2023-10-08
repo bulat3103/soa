@@ -1,4 +1,4 @@
-package model;
+package com.example.extraservice.model;
 
 public enum AstartesCategory {
     AGGRESSOR,

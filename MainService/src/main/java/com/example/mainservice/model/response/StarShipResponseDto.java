@@ -1,9 +1,9 @@
-package model.response;
+package com.example.mainservice.model.response;
 
+import com.example.mainservice.model.Coordinates;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import model.Coordinates;
 
 @Data
 @AllArgsConstructor

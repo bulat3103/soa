@@ -1,6 +1,6 @@
 package com.example.mainservice.services.interfaces;
 
-import model.response.ListSpaceMarine;
+import com.example.mainservice.model.response.ListSpaceMarine;
 
 import java.util.List;
 

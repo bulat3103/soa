@@ -1,11 +1,11 @@
-package model.response;
+package com.example.extraservice.model.response;
 
+import com.example.extraservice.model.AstartesCategory;
+import com.example.extraservice.model.Chapter;
+import com.example.extraservice.model.Coordinates;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import model.AstartesCategory;
-import model.Chapter;
-import model.Coordinates;
 
 import java.time.Instant;
 

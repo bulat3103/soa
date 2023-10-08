@@ -1,6 +1,6 @@
 package com.example.extraservice.services;
 
-import model.request.StarShipCreateDto;
+import com.example.extraservice.model.request.StarShipCreateDto;
 
 public interface StarShipService {
     void unloadAll(Long id);

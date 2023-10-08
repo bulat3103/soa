@@ -1,12 +1,12 @@
 package com.example.mainservice.entity;
 
+import com.example.mainservice.model.AstartesCategory;
+import com.example.mainservice.model.Chapter;
+import com.example.mainservice.model.Coordinates;
+import com.example.mainservice.model.response.SpaceMarineResponseDto;
+import com.example.mainservice.model.response.StarShipResponseDto;
 import lombok.Getter;
 import lombok.Setter;
-import model.AstartesCategory;
-import model.Chapter;
-import model.Coordinates;
-import model.response.SpaceMarineResponseDto;
-import model.response.StarShipResponseDto;
 
 import javax.persistence.*;
 import java.time.Instant;

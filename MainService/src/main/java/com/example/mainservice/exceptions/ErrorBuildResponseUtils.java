@@ -1,6 +1,6 @@
 package com.example.mainservice.exceptions;
 
-import model.Error;
+import com.example.mainservice.model.Error;
 
 import javax.ws.rs.core.Response;
 import java.sql.Timestamp;

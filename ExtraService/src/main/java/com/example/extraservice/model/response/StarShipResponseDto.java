@@ -1,14 +1,14 @@
-package model.request;
+package com.example.extraservice.model.response;
 
+import com.example.extraservice.model.Coordinates;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import model.Coordinates;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StarShipCreateDto {
+public class StarShipResponseDto {
     private Long id;
     private String name;
     private Coordinates coordinates;

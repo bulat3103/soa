@@ -1,11 +1,11 @@
 package com.example.extraservice.services.implementation;
 
+import com.example.extraservice.model.request.SpaceMarineBuildDto;
+import com.example.extraservice.model.request.StarShipCreateDto;
+import com.example.extraservice.model.response.ListSpaceMarine;
+import com.example.extraservice.model.response.SpaceMarineResponseDto;
 import com.example.extraservice.services.StarShipService;
 import com.example.extraservice.utils.RestClient;
-import model.request.SpaceMarineBuildDto;
-import model.request.StarShipCreateDto;
-import model.response.ListSpaceMarine;
-import model.response.SpaceMarineResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

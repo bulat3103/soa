@@ -1,10 +1,10 @@
 package com.example.mainservice.controllers;
 
 import com.example.mainservice.exceptions.InvalidParamException;
+import com.example.mainservice.model.request.SpaceMarineBuildDto;
+import com.example.mainservice.model.response.ListSpaceMarine;
+import com.example.mainservice.model.response.SpaceMarineResponseDto;
 import com.example.mainservice.services.interfaces.SpaceMarineService;
-import model.request.SpaceMarineBuildDto;
-import model.response.ListSpaceMarine;
-import model.response.SpaceMarineResponseDto;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;

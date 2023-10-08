@@ -1,7 +1,7 @@
 package com.example.mainservice.controllers;
 
+import com.example.mainservice.model.request.StarShipCreateDto;
 import com.example.mainservice.services.interfaces.StarShipService;
-import model.request.StarShipCreateDto;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;

@@ -1,6 +1,6 @@
 package com.example.mainservice.services.interfaces;
 
-import model.request.StarShipCreateDto;
+import com.example.mainservice.model.request.StarShipCreateDto;
 
 public interface StarShipService {
     void createStarShip(StarShipCreateDto starShipCreateDto);

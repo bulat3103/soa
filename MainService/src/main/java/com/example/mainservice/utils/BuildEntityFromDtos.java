@@ -1,7 +1,7 @@
 package com.example.mainservice.utils;
 
 import com.example.mainservice.entity.SpaceMarine;
-import model.request.SpaceMarineBuildDto;
+import com.example.mainservice.model.request.SpaceMarineBuildDto;
 
 import java.time.Instant;
 

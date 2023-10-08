@@ -1,8 +1,7 @@
 package com.example.mainservice.services.interfaces;
 
-import com.example.mainservice.entity.SpaceMarine;
-import model.request.SpaceMarineBuildDto;
-import model.response.SpaceMarineResponseDto;
+import com.example.mainservice.model.request.SpaceMarineBuildDto;
+import com.example.mainservice.model.response.SpaceMarineResponseDto;
 
 import java.util.List;
 
