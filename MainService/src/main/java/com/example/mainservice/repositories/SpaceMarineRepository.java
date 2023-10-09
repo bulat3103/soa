@@ -1,15 +1,17 @@
 package com.example.mainservice.repositories;
 
+import com.example.mainservice.entity.FilterOperation;
+import com.example.mainservice.entity.SortOperation;
 import com.example.mainservice.entity.SpaceMarine;
+import com.example.mainservice.model.Filter;
+import com.example.mainservice.model.Sort;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -27,11 +29,66 @@ public class SpaceMarineRepository {
         return entityManager.find(SpaceMarine.class, id);
     }
 
-    public List<SpaceMarine> getAllSpaceMarines(List<String> sort, List<String> filter, Integer page, Integer limit) {
+    public List<SpaceMarine> getAllSpaceMarines(List<Sort> sorts, List<Filter> filters, Integer page, Integer limit) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaDelete<SpaceMarine> criteriaDelete = criteriaBuilder.createCriteriaDelete(SpaceMarine.class);
-        Root<SpaceMarine> from = criteriaDelete.from(SpaceMarine.class);
-        return null;
+        CriteriaQuery<SpaceMarine> criteriaQuery = criteriaBuilder.createQuery(SpaceMarine.class);
+        Root<SpaceMarine> from = criteriaQuery.from(SpaceMarine.class);
+        if (!filters.isEmpty()) {
+            List<Predicate> predicates = new ArrayList<>();
+            for (Filter filter : filters) {
+                if (filter.getOperation().equals(FilterOperation.EQ)) {
+                    predicates.add(criteriaBuilder.equal(
+                            from.get(filter.getField().toString().toLowerCase()),
+                            filter.getValue()
+                    ));
+                } else if (filter.getOperation().equals(FilterOperation.NE)) {
+                    predicates.add(criteriaBuilder.notEqual(
+                            from.get(filter.getField().toString().toLowerCase()),
+                            filter.getValue()
+                    ));
+                } else if (filter.getOperation().equals(FilterOperation.GT)) {
+                    predicates.add(criteriaBuilder.greaterThan(
+                            from.get(filter.getField().toString().toLowerCase()),
+                            filter.getValue()
+                    ));
+                } else if (filter.getOperation().equals(FilterOperation.LT)) {
+                    predicates.add(criteriaBuilder.lessThan(
+                            from.get(filter.getField().toString().toLowerCase()),
+                            filter.getValue()
+                    ));
+                } else if (filter.getOperation().equals(FilterOperation.GTE)) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+                            from.get(filter.getField().toString().toLowerCase()),
+                            filter.getValue()
+                    ));
+                } else if (filter.getOperation().equals(FilterOperation.LTE)) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(
+                            from.get(filter.getField().toString().toLowerCase()),
+                            filter.getValue()
+                    ));
+                }
+            }
+            criteriaQuery.select(from).where(criteriaBuilder.and(predicates.toArray(new Predicate[0])));
+        }
+        if (!sorts.isEmpty()) {
+            List<Order> order = new ArrayList<>();
+            for (Sort sort : sorts) {
+                if (sort.getOperation().equals(SortOperation.ASC)) {
+                    order.add(criteriaBuilder.asc(
+                            from.get(sort.getField().toString().toLowerCase())
+                    ));
+                } else if (sort.getOperation().equals(SortOperation.DESC)) {
+                    order.add(criteriaBuilder.desc(
+                            from.get(sort.getField().toString().toLowerCase())
+                    ));
+                }
+            }
+            criteriaQuery.select(from).orderBy(order);
+        }
+        return entityManager.createQuery(criteriaQuery)
+                .setFirstResult((page - 1) * limit)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     public void deleteById(Long id) {

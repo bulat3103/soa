@@ -2,6 +2,8 @@ package com.example.mainservice.services.implementations;
 
 import com.example.mainservice.entity.SpaceMarine;
 import com.example.mainservice.entity.StarShip;
+import com.example.mainservice.model.Filter;
+import com.example.mainservice.model.Sort;
 import com.example.mainservice.model.request.SpaceMarineBuildDto;
 import com.example.mainservice.model.response.SpaceMarineResponseDto;
 import com.example.mainservice.repositories.SpaceMarineRepository;
@@ -57,7 +59,7 @@ public class SpaceMarineServiceImpl implements SpaceMarineService {
     }
 
     @Override
-    public List<SpaceMarineResponseDto> getAllSpaceMarines(List<String> sort, List<String> filter, Integer page, Integer pageSize) {
+    public List<SpaceMarineResponseDto> getAllSpaceMarines(List<Sort> sort, List<Filter> filter, Integer page, Integer pageSize) {
         return spaceMarineRepository
                 .getAllSpaceMarines(sort, filter, page, pageSize)
                 .stream()

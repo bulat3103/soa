@@ -1,5 +1,7 @@
 package com.example.mainservice.services.interfaces;
 
+import com.example.mainservice.model.Filter;
+import com.example.mainservice.model.Sort;
 import com.example.mainservice.model.request.SpaceMarineBuildDto;
 import com.example.mainservice.model.response.SpaceMarineResponseDto;
 
@@ -14,5 +16,5 @@ public interface SpaceMarineService {
 
     SpaceMarineResponseDto getSpaceMarineById(Long id);
 
-    List<SpaceMarineResponseDto> getAllSpaceMarines(List<String> sort, List<String> filter, Integer page, Integer pageSize);
+    List<SpaceMarineResponseDto> getAllSpaceMarines(List<Sort> sort, List<Filter> filter, Integer page, Integer pageSize);
 }
