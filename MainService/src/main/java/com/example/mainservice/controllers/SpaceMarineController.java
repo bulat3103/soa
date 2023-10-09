@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -26,8 +27,14 @@ public class SpaceMarineController {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSpaceMarineById(@PathParam("id") Long id) {
-        return Response.ok().entity(spaceMarineService.getSpaceMarineById(id)).build();
+    public Response getSpaceMarineById(@PathParam("id") String idStr) {
+        long id;
+        try {
+            id = Long.parseLong(idStr);
+            return Response.ok().entity(spaceMarineService.getSpaceMarineById(id)).build();
+        } catch (NumberFormatException e) {
+            throw new InvalidParamException("Id should be long type!");
+        }
     }
 
     @GET
@@ -68,7 +75,7 @@ public class SpaceMarineController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createSpaceMarine(SpaceMarineBuildDto spaceMarineBuildDto) {
+    public Response createSpaceMarine(@Valid SpaceMarineBuildDto spaceMarineBuildDto) {
         SpaceMarineResponseDto spaceMarine = spaceMarineService.createSpaceMarine(spaceMarineBuildDto);
         return Response.ok().entity(spaceMarine).build();
     }
@@ -77,16 +84,28 @@ public class SpaceMarineController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateSpaceMarine(@PathParam("id") Long id, SpaceMarineBuildDto spaceMarineBuildDto) {
-        SpaceMarineResponseDto spaceMarine = spaceMarineService.updateSpaceMarine(id, spaceMarineBuildDto);
-        return Response.ok().entity(spaceMarine).build();
+    public Response updateSpaceMarine(@PathParam("id") String idStr, @Valid SpaceMarineBuildDto spaceMarineBuildDto) {
+        long id;
+        try {
+            id = Long.parseLong(idStr);
+            SpaceMarineResponseDto spaceMarine = spaceMarineService.updateSpaceMarine(id, spaceMarineBuildDto);
+            return Response.ok().entity(spaceMarine).build();
+        } catch (NumberFormatException exception) {
+            throw new InvalidParamException("Id should be long type!");
+        }
     }
 
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteSpaceMarineById(@PathParam("id") Long id) {
-        spaceMarineService.deleteSpaceMarine(id);
-        return Response.ok().build();
+    public Response deleteSpaceMarineById(@PathParam("id") String idStr) {
+        long id;
+        try {
+            id = Long.parseLong(idStr);
+            spaceMarineService.deleteSpaceMarine(id);
+            return Response.ok().build();
+        } catch (NumberFormatException exception) {
+            throw new InvalidParamException("Id should be long type!");
+        }
     }
 }

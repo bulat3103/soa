@@ -3,7 +3,6 @@ package com.example.mainservice.services.implementations;
 import com.example.mainservice.entity.SpaceMarine;
 import com.example.mainservice.entity.StarShip;
 import com.example.mainservice.exceptions.InvalidParamException;
-import com.example.mainservice.exceptions.NotFoundException;
 import com.example.mainservice.model.request.StarShipCreateDto;
 import com.example.mainservice.repositories.SpaceMarineRepository;
 import com.example.mainservice.repositories.StarShipRepository;
@@ -11,6 +10,7 @@ import com.example.mainservice.services.interfaces.StarShipService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
 import java.util.List;
 
 @Stateless

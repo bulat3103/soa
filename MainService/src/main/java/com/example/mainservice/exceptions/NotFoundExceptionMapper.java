@@ -1,5 +1,6 @@
 package com.example.mainservice.exceptions;
 
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -9,7 +10,7 @@ public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundExceptio
     @Override
     public Response toResponse(NotFoundException e) {
         return ErrorBuildResponseUtils.buildResponse(
-                Response.Status.BAD_REQUEST,
+                Response.Status.NOT_FOUND,
                 e.getMessage()
         );
     }

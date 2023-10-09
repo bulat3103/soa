@@ -4,6 +4,7 @@ import com.example.mainservice.model.request.StarShipCreateDto;
 import com.example.mainservice.services.interfaces.StarShipService;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,7 +18,7 @@ public class StarShipController {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createStarShip(StarShipCreateDto starShipCreateDto) {
+    public Response createStarShip(@Valid StarShipCreateDto starShipCreateDto) {
         starShipService.createStarShip(starShipCreateDto);
         return Response.ok().build();
     }

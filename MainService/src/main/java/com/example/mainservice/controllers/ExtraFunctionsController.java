@@ -24,7 +24,11 @@ public class ExtraFunctionsController {
 
     @GET
     @Path("/lower-achieves")
-    public Response getLowerAchieves(@QueryParam("achieve") String achieve) {
+    public Response getLowerAchieves(@Context HttpServletRequest request) {
+        String achieve = request.getParameter("achieve");
+        if (StringUtils.isEmpty(achieve) || StringUtils.isBlank(achieve)) {
+            throw new InvalidParamException("Achieve param shouldn't be empty!");
+        }
         return Response.ok().entity(extraFunctionsService.getLowerAchieves(achieve)).build();
     }
 
