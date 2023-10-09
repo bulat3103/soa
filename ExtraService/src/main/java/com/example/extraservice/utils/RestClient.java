@@ -43,11 +43,11 @@ public class RestClient implements InitializingBean {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
         String url = UriComponentsBuilder.fromHttpUrl(mainServiceUrl + MainServiceEndpoints.SPACEMARINES)
-                .queryParam("sort", "{sort}")
+                .queryParam("filter", "{filter}")
                 .encode()
                 .toUriString();
         Map<String, String> params = new HashMap<>();
-        params.put("sort", "id[eq]=" + starShipId);
+        params.put("filter", "id[eq]=" + starShipId);
         return restTemplate.exchange(url, HttpMethod.GET, httpEntity, ListSpaceMarine.class, params);
     }
 }

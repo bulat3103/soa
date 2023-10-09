@@ -81,6 +81,7 @@ public class SpaceMarineController {
                 getFilterParameters(filter),
                 pageInt,
                 pageSizeInt);
+        if (spaceMarines.isEmpty()) throw new NotFoundException("SpaceMarines weren't found");
         return Response.ok().entity(new ListSpaceMarine(spaceMarines)).build();
     }
 

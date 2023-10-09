@@ -72,16 +72,17 @@ public class SpaceMarine {
                         spaceMarine.getChapterName(),
                         spaceMarine.getChapterSpaceMarinesCount()
                 ),
-                new StarShipResponseDto(
-                        spaceMarine.getStarShip().getId(),
-                        spaceMarine.getStarShip().getName(),
-                        new Coordinates(
-                                spaceMarine.getStarShip().getCoordinateX(),
-                                spaceMarine.getStarShip().getCoordinateY()
-                        ),
-                        spaceMarine.getStarShip().getCrewCount(),
-                        spaceMarine.getStarShip().getHealth()
-                )
+                spaceMarine.getStarShip() == null ? null :
+                        new StarShipResponseDto(
+                                spaceMarine.getStarShip().getId(),
+                                spaceMarine.getStarShip().getName(),
+                                new Coordinates(
+                                        spaceMarine.getStarShip().getCoordinateX(),
+                                        spaceMarine.getStarShip().getCoordinateY()
+                                ),
+                                spaceMarine.getStarShip().getCrewCount(),
+                                spaceMarine.getStarShip().getHealth()
+                        )
         );
     }
 }

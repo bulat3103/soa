@@ -27,6 +27,10 @@ public class SpaceMarineServiceImpl implements SpaceMarineService {
     @Override
     public SpaceMarineResponseDto createSpaceMarine(SpaceMarineBuildDto spaceMarineBuildDto) {
         SpaceMarine spaceMarine = BuildEntityFromDtos.buildSpaceMarine(spaceMarineBuildDto);
+        if (spaceMarineBuildDto.getStarshipId() == null) {
+            spaceMarine.setStarShip(null);
+            return SpaceMarine.buildResponseDto(spaceMarineRepository.save(spaceMarine));
+        }
         StarShip starShip = shipRepository.getById(spaceMarineBuildDto.getStarshipId());
         if (starShip == null) throw new NotFoundException("Starship with id = " + spaceMarineBuildDto.getStarshipId() + " doesn't exist");
         spaceMarine.setStarShip(starShip);
@@ -38,6 +42,10 @@ public class SpaceMarineServiceImpl implements SpaceMarineService {
         SpaceMarine spaceMarine = spaceMarineRepository.getById(id);
         if (spaceMarine == null) throw new NotFoundException("SpaceMarine with id = " + id + " doesn't exist");
         BuildEntityFromDtos.buildCommonSpaceMarineFields(spaceMarine, spaceMarineBuildDto);
+        if (spaceMarineBuildDto.getStarshipId() == null) {
+            spaceMarine.setStarShip(null);
+            return SpaceMarine.buildResponseDto(spaceMarineRepository.save(spaceMarine));
+        }
         StarShip starShip = shipRepository.getById(spaceMarineBuildDto.getStarshipId());
         if (starShip == null) throw new NotFoundException("Starship with id = " + spaceMarineBuildDto.getStarshipId() + " doesn't exist");
         spaceMarine.setStarShip(starShip);

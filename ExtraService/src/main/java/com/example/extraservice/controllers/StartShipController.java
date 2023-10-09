@@ -3,12 +3,10 @@ package com.example.extraservice.controllers;
 import com.example.extraservice.model.request.StarShipCreateDto;
 import com.example.extraservice.services.StarShipService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController(value = "/starship")
+@RestController
+@RequestMapping("starship")
 public class StartShipController {
     private final StarShipService starShipService;
 
@@ -22,12 +20,11 @@ public class StartShipController {
             @PathVariable("name") String name,
             @RequestBody StarShipCreateDto starShipCreateDto)
     {
-        return ResponseEntity.ok().build();
+        return starShipService.createNewStarShip(id, name, starShipCreateDto);
     }
 
     @PostMapping(value = "/{id}/unload-all")
     public ResponseEntity<?> unloadAll(@PathVariable("id") Long id) {
-        starShipService.unloadAll(id);
-        return ResponseEntity.ok().build();
+        return starShipService.unloadAll(id);
     }
 }

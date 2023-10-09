@@ -1,9 +1,10 @@
 package com.example.extraservice.services;
 
 import com.example.extraservice.model.request.StarShipCreateDto;
+import org.springframework.http.ResponseEntity;
 
 public interface StarShipService {
-    void unloadAll(Long id);
+    ResponseEntity<?> unloadAll(Long id);
 
-    void createNewStarShip(Long id, String name, StarShipCreateDto createDto);
+    ResponseEntity<?> createNewStarShip(Long id, String name, StarShipCreateDto createDto);
 }
