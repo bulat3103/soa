@@ -38,32 +38,32 @@ public class SpaceMarineRepository {
             for (Filter filter : filters) {
                 if (filter.getOperation().equals(FilterOperation.EQ)) {
                     predicates.add(criteriaBuilder.equal(
-                            from.get(filter.getField().toString().toLowerCase()),
+                            from.get(filter.getField().getName()),
                             filter.getValue()
                     ));
                 } else if (filter.getOperation().equals(FilterOperation.NE)) {
                     predicates.add(criteriaBuilder.notEqual(
-                            from.get(filter.getField().toString().toLowerCase()),
+                            from.get(filter.getField().getName()),
                             filter.getValue()
                     ));
                 } else if (filter.getOperation().equals(FilterOperation.GT)) {
                     predicates.add(criteriaBuilder.greaterThan(
-                            from.get(filter.getField().toString().toLowerCase()),
+                            from.get(filter.getField().getName()),
                             filter.getValue()
                     ));
                 } else if (filter.getOperation().equals(FilterOperation.LT)) {
                     predicates.add(criteriaBuilder.lessThan(
-                            from.get(filter.getField().toString().toLowerCase()),
+                            from.get(filter.getField().getName()),
                             filter.getValue()
                     ));
                 } else if (filter.getOperation().equals(FilterOperation.GTE)) {
                     predicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                            from.get(filter.getField().toString().toLowerCase()),
+                            from.get(filter.getField().getName()),
                             filter.getValue()
                     ));
                 } else if (filter.getOperation().equals(FilterOperation.LTE)) {
                     predicates.add(criteriaBuilder.lessThanOrEqualTo(
-                            from.get(filter.getField().toString().toLowerCase()),
+                            from.get(filter.getField().getName()),
                             filter.getValue()
                     ));
                 }
@@ -75,11 +75,11 @@ public class SpaceMarineRepository {
             for (Sort sort : sorts) {
                 if (sort.getOperation().equals(SortOperation.ASC)) {
                     order.add(criteriaBuilder.asc(
-                            from.get(sort.getField().toString().toLowerCase())
+                            from.get(sort.getField().getName())
                     ));
                 } else if (sort.getOperation().equals(SortOperation.DESC)) {
                     order.add(criteriaBuilder.desc(
-                            from.get(sort.getField().toString().toLowerCase())
+                            from.get(sort.getField().getName())
                     ));
                 }
             }

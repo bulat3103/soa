@@ -56,13 +56,13 @@ public class SpaceMarineController {
         StringBuilder errorMessage = new StringBuilder();
         int pageInt = 1, pageSizeInt = 20;
         try {
-            pageInt = StringUtils.isEmpty(page) ? 0 : Integer.parseInt(page);
+            pageInt = StringUtils.isEmpty(page) ? 1 : Integer.parseInt(page);
             if (pageInt < 0) throw new NumberFormatException();
         } catch (NumberFormatException exception) {
             errorMessage.append("Invalid page parameter");
         }
         try {
-            pageSizeInt = StringUtils.isEmpty(pageSize) ? 0 : Integer.parseInt(pageSize);
+            pageSizeInt = StringUtils.isEmpty(pageSize) ? 20 : Integer.parseInt(pageSize);
             if (pageSizeInt < 0) throw new NumberFormatException();
         } catch (NumberFormatException exception) {
             errorMessage.append("Invalid pageSize parameter");

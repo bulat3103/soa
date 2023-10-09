@@ -3,6 +3,7 @@ package com.example.mainservice.services.implementations;
 import com.example.mainservice.entity.SpaceMarine;
 import com.example.mainservice.model.response.ListSpaceMarine;
 import com.example.mainservice.model.response.SpaceMarineResponseDto;
+import com.example.mainservice.model.response.UniqueHeart;
 import com.example.mainservice.repositories.SpaceMarineRepository;
 import com.example.mainservice.services.interfaces.ExtraFunctionsService;
 
@@ -17,8 +18,8 @@ public class ExtraFunctionsServiceImpl implements ExtraFunctionsService {
     private SpaceMarineRepository spaceMarineRepository;
 
     @Override
-    public List<Integer> getUniqueHeartCount() {
-        return spaceMarineRepository.getUniqueHeartCountColumn();
+    public UniqueHeart getUniqueHeartCount() {
+        return new UniqueHeart(spaceMarineRepository.getUniqueHeartCountColumn());
     }
 
     @Override

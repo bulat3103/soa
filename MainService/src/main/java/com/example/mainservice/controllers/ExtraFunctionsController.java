@@ -1,5 +1,6 @@
 package com.example.mainservice.controllers;
 
+import com.example.mainservice.entity.AvailablePatternFields;
 import com.example.mainservice.entity.AvailableSortFields;
 import com.example.mainservice.exceptions.InvalidParamException;
 import com.example.mainservice.services.interfaces.ExtraFunctionsService;
@@ -41,8 +42,11 @@ public class ExtraFunctionsController {
         if (StringUtils.isEmpty(field)) {
             errorMessage.append("Field shouldn't be empty");
         } else {
-            List<String> values = Stream.of(AvailableSortFields.values()).map(Enum::toString).collect(Collectors.toList());
-            if (!values.contains(field.toUpperCase())) {
+            List<String> values = Stream.of(AvailablePatternFields.values())
+                    .map(Enum::toString)
+                    .map(String::toLowerCase)
+                    .collect(Collectors.toList());
+            if (!values.contains(field.toLowerCase())) {
                 errorMessage.append("Not available field type");
             }
         }
