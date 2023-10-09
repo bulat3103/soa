@@ -16,9 +16,7 @@ public class StarShipRepository {
     }
 
     public void save(StarShip starShip) {
-        entityManager.getTransaction().begin();
         entityManager.persist(starShip);
-        entityManager.getTransaction().commit();
         entityManager.flush();
     }
 }

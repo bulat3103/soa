@@ -4,18 +4,18 @@ import com.example.mainservice.model.request.StarShipCreateDto;
 import com.example.mainservice.services.interfaces.StarShipService;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@Path("/starship")
 public class StarShipController {
     @Inject
     private StarShipService starShipService;
 
-    @GET
-    @Path("/starship")
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response createStarShip(StarShipCreateDto starShipCreateDto) {
         starShipService.createStarShip(starShipCreateDto);

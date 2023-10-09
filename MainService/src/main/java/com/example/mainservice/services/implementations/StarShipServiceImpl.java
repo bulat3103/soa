@@ -30,7 +30,7 @@ public class StarShipServiceImpl implements StarShipService {
         starShip.setCoordinateX(starShipCreateDto.getCoordinates().getX());
         starShip.setCoordinateY(starShipCreateDto.getCoordinates().getY());
         starShip.setCrewCount(starShipCreateDto.getCrewCount());
-        starShip.setCrewCount(starShipCreateDto.getCrewCount());
+        starShip.setHealth(starShipCreateDto.getHealth());
         shipRepository.save(starShip);
     }
 

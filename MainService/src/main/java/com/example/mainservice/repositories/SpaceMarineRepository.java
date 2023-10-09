@@ -18,9 +18,7 @@ public class SpaceMarineRepository {
     private EntityManager entityManager;
 
     public SpaceMarine save(SpaceMarine spaceMarine) {
-        entityManager.getTransaction().begin();
         entityManager.persist(spaceMarine);
-        entityManager.getTransaction().commit();
         entityManager.flush();
         return spaceMarine;
     }

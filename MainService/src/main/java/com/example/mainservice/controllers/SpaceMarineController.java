@@ -18,19 +18,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Path("/spacemarines")
 public class SpaceMarineController {
     @Inject
     private SpaceMarineService spaceMarineService;
 
     @GET
-    @Path("/spacemarines/{id}")
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSpaceMarineById(@PathParam("id") Long id) {
         return Response.ok().entity(spaceMarineService.getSpaceMarineById(id)).build();
     }
 
     @GET
-    @Path("/spacemarines")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSpaceMarines(@Context HttpServletRequest request) {
@@ -66,7 +66,6 @@ public class SpaceMarineController {
     }
 
     @POST
-    @Path("/spacemarines")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createSpaceMarine(SpaceMarineBuildDto spaceMarineBuildDto) {
@@ -75,7 +74,7 @@ public class SpaceMarineController {
     }
 
     @PUT
-    @Path("/spacemarines/{id}")
+    @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateSpaceMarine(@PathParam("id") Long id, SpaceMarineBuildDto spaceMarineBuildDto) {
@@ -84,7 +83,7 @@ public class SpaceMarineController {
     }
 
     @DELETE
-    @Path("/spacemarines/{id}")
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteSpaceMarineById(@PathParam("id") Long id) {
         spaceMarineService.deleteSpaceMarine(id);

@@ -3,7 +3,7 @@
     <persistence-unit name="SpaceMarine">
         <class>com.example.mainservice.entity.SpaceMarine</class>
         <class>com.example.mainservice.entity.StarShip</class>
-        <jta-data-source>java:/PostgresDS</jta-data-source>
+        <jta-data-source>java:jboss/datasources/PostgresqlDS</jta-data-source>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
             <property name="hibernate.jpa.compliance.global_id_generators" value="false"/>
