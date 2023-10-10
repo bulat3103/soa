@@ -51,6 +51,9 @@ public class SpaceMarine {
     @Column(name = "chapter_spacemarines_count")
     private Integer chapterSpaceMarinesCount;
 
+    @Column(name = "starship_id", insertable = false, updatable = false)
+    private Long starshipId;
+
     @ManyToOne
     @JoinColumn(name = "starship_id")
     private StarShip starShip;

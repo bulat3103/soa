@@ -1,8 +1,6 @@
 package com.example.mainservice.repositories;
 
-import com.example.mainservice.entity.FilterOperation;
-import com.example.mainservice.entity.SortOperation;
-import com.example.mainservice.entity.SpaceMarine;
+import com.example.mainservice.entity.*;
 import com.example.mainservice.model.Filter;
 import com.example.mainservice.model.Sort;
 
