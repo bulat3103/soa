@@ -14,6 +14,11 @@ public class StartShipController {
         this.starShipService = starShipService;
     }
 
+    @GetMapping(value = "/hello")
+    public String hello() {
+        return "Hello, World!";
+    }
+
     @PostMapping(value = "/create/{id}/{name}")
     public ResponseEntity<?> createNewStarShip(
             @PathVariable("id") Long id,
