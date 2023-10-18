@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -38,9 +39,11 @@ public class StarShipServiceImpl implements StarShipService {
             }
             return ResponseEntity.ok(new ListSpaceMarine(marinesUpdated));
         } catch (HttpClientErrorException.NotFound e) {
-            return ResponseEntity.status(404).body(new Error(400, "Not found", Timestamp.from(Instant.now())));
+            return ResponseEntity.status(404).body(new Error(404, "Not found", Timestamp.from(Instant.now())));
         } catch (HttpClientErrorException.BadRequest e) {
             return ResponseEntity.status(400).body(new Error(400, "Validation failed", Timestamp.from(Instant.now())));
+        } catch (HttpServerErrorException.InternalServerError e) {
+            return ResponseEntity.status(500).body(new Error(500, "Internal server error", Timestamp.from(Instant.now())));
         }
     }
 
@@ -51,6 +54,8 @@ public class StarShipServiceImpl implements StarShipService {
             return ResponseEntity.ok().build();
         } catch (HttpClientErrorException.BadRequest e) {
             return ResponseEntity.status(400).body(new Error(400, "Validation failed", Timestamp.from(Instant.now())));
+        } catch (HttpServerErrorException.InternalServerError e) {
+            return ResponseEntity.status(500).body(new Error(500, "Internal server error", Timestamp.from(Instant.now())));
         }
     }
 

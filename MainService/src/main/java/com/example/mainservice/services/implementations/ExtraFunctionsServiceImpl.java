@@ -28,9 +28,9 @@ public class ExtraFunctionsServiceImpl implements ExtraFunctionsService {
     }
 
     @Override
-    public ListSpaceMarine getByPattern(String field, String value) {
+    public List<SpaceMarineResponseDto> getByPattern(String field, String value) {
         List<SpaceMarine> byPattern = spaceMarineRepository.getByPattern(field, value);
         List<SpaceMarineResponseDto> convertToDto = byPattern.stream().map(SpaceMarine::buildResponseDto).collect(Collectors.toList());
-        return new ListSpaceMarine(convertToDto);
+        return convertToDto;
     }
 }

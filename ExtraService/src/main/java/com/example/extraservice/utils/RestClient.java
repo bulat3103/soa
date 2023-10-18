@@ -28,19 +28,24 @@ public class RestClient implements InitializingBean {
     }
 
     public ResponseEntity<?> createStarShip(StarShipCreateDto dto) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
         String url = mainServiceUrl + MainServiceEndpoints.STARSHIP;
-        HttpEntity<StarShipCreateDto> httpEntity = new HttpEntity<>(dto);
+        HttpEntity<StarShipCreateDto> httpEntity = new HttpEntity<>(dto, headers);
         return restTemplate.exchange(url, HttpMethod.POST, httpEntity, Void.class);
     }
 
     public ResponseEntity<SpaceMarineResponseDto> updateSpacemarine(Long id, SpaceMarineBuildDto dto) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
         String url = mainServiceUrl + MainServiceEndpoints.SPACEMARINES + id;
-        HttpEntity<SpaceMarineBuildDto> httpEntity = new HttpEntity<>(dto);
+        HttpEntity<SpaceMarineBuildDto> httpEntity = new HttpEntity<>(dto, headers);
         return restTemplate.exchange(url, HttpMethod.PUT, httpEntity, SpaceMarineResponseDto.class);
     }
 
     public ResponseEntity<ListSpaceMarine> getSpaceMarines(Long starShipId) {
         HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
         String url = UriComponentsBuilder.fromHttpUrl(mainServiceUrl + MainServiceEndpoints.SPACEMARINES)
                 .queryParam("filter", "{filter}")

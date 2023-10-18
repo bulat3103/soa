@@ -5,12 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class StarShipResponseDto {
-    private Long id;
+@AllArgsConstructor
+public class ChapterResponseDto {
     private String name;
-    private CoordinatesResponseDto coordinates;
-    private Integer crewCount;
-    private Integer health;
+    private Integer marinesCount;
 }

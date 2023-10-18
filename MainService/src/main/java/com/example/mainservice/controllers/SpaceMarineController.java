@@ -1,27 +1,29 @@
 package com.example.mainservice.controllers;
 
-import com.example.mainservice.entity.AvailableFilterFields;
-import com.example.mainservice.entity.AvailableSortFields;
+import com.example.mainservice.entity.AvailableFields;
 import com.example.mainservice.entity.FilterOperation;
 import com.example.mainservice.entity.SortOperation;
 import com.example.mainservice.exceptions.InvalidParamException;
 import com.example.mainservice.model.Filter;
 import com.example.mainservice.model.Sort;
 import com.example.mainservice.model.request.SpaceMarineBuildDto;
-import com.example.mainservice.model.response.ListSpaceMarine;
 import com.example.mainservice.model.response.SpaceMarineResponseDto;
 import com.example.mainservice.services.interfaces.SpaceMarineService;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -41,7 +43,7 @@ public class SpaceMarineController {
             id = Long.parseLong(idStr);
             return Response.ok().entity(spaceMarineService.getSpaceMarineById(id)).build();
         } catch (NumberFormatException e) {
-            throw new InvalidParamException("Id should be long type!");
+            throw new InvalidParamException("Invalid id value");
         }
     }
 
@@ -53,19 +55,18 @@ public class SpaceMarineController {
         String[] filterParameters = request.getParameterValues("filter");
         String page = request.getParameter("page");
         String pageSize = request.getParameter("pageSize");
-        StringBuilder errorMessage = new StringBuilder();
-        int pageInt = 1, pageSizeInt = 20;
+        int pageInt, pageSizeInt;
         try {
             pageInt = StringUtils.isEmpty(page) ? 1 : Integer.parseInt(page);
-            if (pageInt < 0) throw new NumberFormatException();
+            if (pageInt <= 0) throw new NumberFormatException();
         } catch (NumberFormatException exception) {
-            errorMessage.append("Invalid page parameter");
+            throw new InvalidParamException("Validation failed");
         }
         try {
             pageSizeInt = StringUtils.isEmpty(pageSize) ? 20 : Integer.parseInt(pageSize);
-            if (pageSizeInt < 0) throw new NumberFormatException();
+            if (pageSizeInt <= 0) throw new NumberFormatException();
         } catch (NumberFormatException exception) {
-            errorMessage.append("Invalid pageSize parameter");
+            throw new InvalidParamException("Validation failed");
         }
         List<String> sort;
         if (sortParameters == null) sort = new ArrayList<>();
@@ -73,22 +74,19 @@ public class SpaceMarineController {
         List<String> filter;
         if (filterParameters == null) filter = new ArrayList<>();
         else filter = Stream.of(filterParameters).filter(StringUtils::isNotEmpty).collect(Collectors.toList());
-        if (errorMessage.length() != 0) {
-            throw new InvalidParamException(errorMessage.toString());
-        }
         List<SpaceMarineResponseDto> spaceMarines = spaceMarineService.getAllSpaceMarines(
                 getSortParameters(sort),
                 getFilterParameters(filter),
                 pageInt,
                 pageSizeInt);
         if (spaceMarines.isEmpty()) throw new NotFoundException("SpaceMarines weren't found");
-        return Response.ok().entity(new ListSpaceMarine(spaceMarines)).build();
+        return Response.ok().entity(spaceMarines).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createSpaceMarine(@Valid SpaceMarineBuildDto spaceMarineBuildDto) {
+    public Response createSpaceMarine(SpaceMarineBuildDto spaceMarineBuildDto) {
         SpaceMarineResponseDto spaceMarine = spaceMarineService.createSpaceMarine(spaceMarineBuildDto);
         return Response.ok().entity(spaceMarine).build();
     }
@@ -97,14 +95,14 @@ public class SpaceMarineController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateSpaceMarine(@PathParam("id") String idStr, @Valid SpaceMarineBuildDto spaceMarineBuildDto) {
+    public Response updateSpaceMarine(@PathParam("id") String idStr, SpaceMarineBuildDto spaceMarineBuildDto) {
         long id;
         try {
             id = Long.parseLong(idStr);
             SpaceMarineResponseDto spaceMarine = spaceMarineService.updateSpaceMarine(id, spaceMarineBuildDto);
             return Response.ok().entity(spaceMarine).build();
         } catch (NumberFormatException exception) {
-            throw new InvalidParamException("Id should be long type!");
+            throw new InvalidParamException("Validation failed");
         }
     }
 
@@ -112,13 +110,18 @@ public class SpaceMarineController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteSpaceMarineById(@PathParam("id") String idStr) {
+        Map<String, Object> map = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
         long id;
         try {
             id = Long.parseLong(idStr);
             spaceMarineService.deleteSpaceMarine(id);
-            return Response.ok().build();
+            map.put("code", 200);
+            map.put("message", "The marine was successfully deleted");
+            map.put("time", ZonedDateTime.now(ZoneOffset.UTC).format(formatter));
+            return Response.ok().entity(map).build();
         } catch (NumberFormatException exception) {
-            throw new InvalidParamException("Id should be long type!");
+            throw new InvalidParamException("Invalid id value");
         }
     }
 
@@ -128,16 +131,16 @@ public class SpaceMarineController {
         for (String sortP : list) {
             String[] split = sortP.split("=");
             if (split.length != 2) {
-                throw new InvalidParamException("Invalid sort parameter");
+                throw new InvalidParamException("Validation failed");
             }
-            if (!AvailableSortFields.checkContains(split[0])) {
-                throw new InvalidParamException("Illegal sort field");
+            if (!AvailableFields.checkContains(split[0])) {
+                throw new InvalidParamException("Validation failed");
             }
             if (!sortOps.contains(split[1])) {
-                throw new InvalidParamException("Illegal sort operation");
+                throw new InvalidParamException("Validation failed");
             }
             sorts.add(new Sort(
-                    AvailableSortFields.getByName(split[0]),
+                    AvailableFields.getByName(split[0]),
                     SortOperation.valueOf(split[1].toUpperCase())));
         }
         return sorts;
@@ -150,31 +153,67 @@ public class SpaceMarineController {
             Matcher matcher = pattern.matcher(filter);
             if (matcher.find()) {
                 String field = matcher.group(1), op = matcher.group(2), value = matcher.group(3);
-                if (!AvailableFilterFields.checkContains(field)) {
-                    throw new InvalidParamException("Invalid filter parameter");
+                if (!AvailableFields.checkContains(field)) {
+                    throw new InvalidParamException("Validation failed");
                 }
                 if (!FilterOperation.checkContains(op)) {
-                    throw new InvalidParamException("Invalid filter operation");
+                    throw new InvalidParamException("Validation failed");
                 }
-                if (field.equals(AvailableFilterFields.NAME.getName())
-                        || field.equals(AvailableFilterFields.ACHIEVEMENTS.getName())
-                        || field.equals(AvailableFilterFields.CATEGORY.getName()))
+                checkNumberFields(field, value);
+                if (field.equals(AvailableFields.NAME.getName())
+                        || field.equals(AvailableFields.ACHIEVEMENTS.getName())
+                        || field.equals(AvailableFields.CATEGORY.getName()))
                 {
                     if (!op.equalsIgnoreCase(FilterOperation.EQ.toString())
                             && !op.equalsIgnoreCase(FilterOperation.NE.toString()))
                     {
-                        throw new InvalidParamException("Only EQ and NE allowed for string fields");
+                        throw new InvalidParamException("Validation failed");
                     }
                 }
                 filters.add(new Filter(
-                        AvailableFilterFields.getByName(field),
+                        AvailableFields.getByName(field),
                         FilterOperation.valueOf(op.toUpperCase()),
                         value
                 ));
             } else {
-                throw new InvalidParamException("Invalid filter parameters");
+                throw new InvalidParamException("Validation failed");
             }
         }
         return filters;
+    }
+
+    private void checkNumberFields(String field, String value) {
+        if (field.equals(AvailableFields.ID.getName())
+                || field.equals(AvailableFields.HEALTH.getName())
+                || field.equals(AvailableFields.HEART_COUNT.getName())
+                || field.equals(AvailableFields.STARSHIP_ID.getName()))
+        {
+            try {
+                Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                throw new InvalidParamException("Validation failed");
+            }
+        }
+        if (field.equals(AvailableFields.ID.getName())
+                || field.equals(AvailableFields.STARSHIP_ID.getName())
+                || field.equals(AvailableFields.COORDINATES_X.getName())
+                || field.equals(AvailableFields.STARSHIP_COORDINATES_X.getName()))
+        {
+            try {
+                Long.parseLong(value);
+            } catch (NumberFormatException e) {
+                throw new InvalidParamException("Validation failed");
+            }
+        }
+        if (field.equals(AvailableFields.COORDINATES_Y.getName())
+                || field.equals(AvailableFields.HEALTH.getName())
+                || field.equals(AvailableFields.STARSHIP_COORDINATES_Y.getName()))
+        {
+            try {
+                Double.parseDouble(value);
+            } catch (NumberFormatException e) {
+                throw new InvalidParamException("Validation failed");
+            }
+        }
     }
 }

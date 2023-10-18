@@ -1,47 +1,32 @@
 package com.example.mainservice.services.implementations;
 
-import com.example.mainservice.entity.SpaceMarine;
 import com.example.mainservice.entity.StarShip;
 import com.example.mainservice.exceptions.InvalidParamException;
 import com.example.mainservice.model.request.StarShipCreateDto;
-import com.example.mainservice.repositories.SpaceMarineRepository;
 import com.example.mainservice.repositories.StarShipRepository;
 import com.example.mainservice.services.interfaces.StarShipService;
+import com.example.mainservice.validators.StarShipCreateDtoValidator;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.NotFoundException;
-import java.util.List;
 
 @Stateless
 public class StarShipServiceImpl implements StarShipService {
     @Inject
     private StarShipRepository shipRepository;
-    @Inject
-    private SpaceMarineRepository spaceMarineRepository;
 
     @Override
     public void createStarShip(StarShipCreateDto starShipCreateDto) {
-        StarShip inDb = shipRepository.getById(starShipCreateDto.getId());
-        if (inDb != null) throw new InvalidParamException("StarShip with id = " + starShipCreateDto.getId() + " is already exists");
+        StarShipCreateDtoValidator.validate(starShipCreateDto);
+        StarShip inDb = shipRepository.getById(Long.parseLong(starShipCreateDto.getId()));
+        if (inDb != null) throw new InvalidParamException("Validation failed");
         StarShip starShip = new StarShip();
-        starShip.setId(starShipCreateDto.getId());
+        starShip.setId(Long.parseLong(starShipCreateDto.getId()));
         starShip.setName(starShipCreateDto.getName());
-        starShip.setCoordinateX(starShipCreateDto.getCoordinates().getX());
-        starShip.setCoordinateY(starShipCreateDto.getCoordinates().getY());
-        starShip.setCrewCount(starShipCreateDto.getCrewCount());
-        starShip.setHealth(starShipCreateDto.getHealth());
+        starShip.setCoordinateX(Long.parseLong(starShipCreateDto.getCoordinates().getX()));
+        starShip.setCoordinateY(Double.parseDouble(starShipCreateDto.getCoordinates().getY()));
+        starShip.setCrewCount(Integer.parseInt(starShipCreateDto.getCrewCount()));
+        starShip.setHealth(Integer.parseInt(starShipCreateDto.getHealth()));
         shipRepository.save(starShip);
-    }
-
-    @Override
-    public void unloadAllFromStarShip(Long id) {
-        StarShip ship = shipRepository.getById(id);
-        if (ship == null) throw new NotFoundException("StarShip with id = " + id + " doesn't exist");
-        List<SpaceMarine> byStarShipId = spaceMarineRepository.getByStarShipId(id);
-        for (SpaceMarine spaceMarine : byStarShipId) {
-            spaceMarine.setStarShip(null);
-            spaceMarineRepository.save(spaceMarine);
-        }
     }
 }

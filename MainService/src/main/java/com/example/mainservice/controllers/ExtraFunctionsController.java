@@ -1,8 +1,8 @@
 package com.example.mainservice.controllers;
 
 import com.example.mainservice.entity.AvailablePatternFields;
-import com.example.mainservice.entity.AvailableSortFields;
 import com.example.mainservice.exceptions.InvalidParamException;
+import com.example.mainservice.model.response.UniqueHeart;
 import com.example.mainservice.services.interfaces.ExtraFunctionsService;
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,7 +28,7 @@ public class ExtraFunctionsController {
     public Response getLowerAchieves(@Context HttpServletRequest request) {
         String achieve = request.getParameter("achieve");
         if (StringUtils.isEmpty(achieve) || StringUtils.isBlank(achieve)) {
-            throw new InvalidParamException("Achieve param shouldn't be empty!");
+            throw new InvalidParamException("Validation failed");
         }
         return Response.ok().entity(extraFunctionsService.getLowerAchieves(achieve)).build();
     }
@@ -38,23 +38,19 @@ public class ExtraFunctionsController {
     public Response getByPattern(@Context HttpServletRequest request) {
         String field = request.getParameter("field");
         String value = request.getParameter("value");
-        StringBuilder errorMessage = new StringBuilder();
         if (StringUtils.isEmpty(field)) {
-            errorMessage.append("Field shouldn't be empty");
+            throw new InvalidParamException("Validation failed");
         } else {
             List<String> values = Stream.of(AvailablePatternFields.values())
                     .map(Enum::toString)
                     .map(String::toLowerCase)
                     .collect(Collectors.toList());
             if (!values.contains(field.toLowerCase())) {
-                errorMessage.append("Not available field type");
+                throw new InvalidParamException("Validation failed");
             }
         }
         if (StringUtils.isEmpty(value)) {
-            errorMessage.append("Value shouldn't be empty");
-        }
-        if (errorMessage.length() != 0) {
-            throw new InvalidParamException(errorMessage.toString());
+            throw new InvalidParamException("Validation failed");
         }
         return Response.ok().entity(extraFunctionsService.getByPattern(field, value)).build();
     }
@@ -62,6 +58,10 @@ public class ExtraFunctionsController {
     @GET
     @Path("/unique/heart")
     public Response getUniqueHeart() {
-        return Response.ok().entity(extraFunctionsService.getUniqueHeartCount()).build();
+        UniqueHeart uniqueHeartCount = extraFunctionsService.getUniqueHeartCount();
+        if (uniqueHeartCount.getHearts().isEmpty()) {
+            throw new NotFoundException("Not found");
+        }
+        return Response.ok().entity(extraFunctionsService.getUniqueHeartCount().getHearts()).build();
     }
 }
