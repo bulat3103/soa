@@ -1,6 +1,7 @@
 package com.example.mainservice.repositories;
 
 import com.example.mainservice.entity.*;
+import com.example.mainservice.model.AstartesCategory;
 import com.example.mainservice.model.Filter;
 import com.example.mainservice.model.Sort;
 
@@ -32,37 +33,67 @@ public class SpaceMarineRepository {
         Root<SpaceMarine> from = criteriaQuery.from(SpaceMarine.class);
         if (!filters.isEmpty()) {
             List<Predicate> predicates = new ArrayList<>();
-            for (Filter filter : filters) {
+            for (Filter filter: filters) {
+                boolean isEnum = filter.getField().equals(AvailableFields.CATEGORY);
+                AstartesCategory category = AstartesCategory.getFilter(filter.getValue(), filter.getOperation());
                 if (filter.getOperation().equals(FilterOperation.EQ)) {
                     predicates.add(criteriaBuilder.equal(
                             from.get(filter.getField().getName()),
-                            filter.getValue()
+                            isEnum ? category: filter.getValue()
                     ));
                 } else if (filter.getOperation().equals(FilterOperation.NE)) {
                     predicates.add(criteriaBuilder.notEqual(
                             from.get(filter.getField().getName()),
-                            filter.getValue()
+                            isEnum ? category: filter.getValue()
                     ));
                 } else if (filter.getOperation().equals(FilterOperation.GT)) {
-                    predicates.add(criteriaBuilder.greaterThan(
-                            from.get(filter.getField().getName()),
-                            filter.getValue()
-                    ));
+                    if (isEnum) {
+                        predicates.add(criteriaBuilder.greaterThan(
+                                from.get(filter.getField().getName()),
+                                category
+                        ));
+                    } else {
+                        predicates.add(criteriaBuilder.greaterThan(
+                                from.get(filter.getField().getName()),
+                                filter.getValue()
+                        ));
+                    }
                 } else if (filter.getOperation().equals(FilterOperation.LT)) {
-                    predicates.add(criteriaBuilder.lessThan(
-                            from.get(filter.getField().getName()),
-                            filter.getValue()
-                    ));
+                    if (isEnum) {
+                        predicates.add(criteriaBuilder.lessThan(
+                                from.get(filter.getField().getName()),
+                                category
+                        ));
+                    } else {
+                        predicates.add(criteriaBuilder.lessThan(
+                                from.get(filter.getField().getName()),
+                                filter.getValue()
+                        ));
+                    }
                 } else if (filter.getOperation().equals(FilterOperation.GTE)) {
-                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                            from.get(filter.getField().getName()),
-                            filter.getValue()
-                    ));
+                    if (isEnum) {
+                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+                                from.get(filter.getField().getName()),
+                                category
+                        ));
+                    } else {
+                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+                                from.get(filter.getField().getName()),
+                                filter.getValue()
+                        ));
+                    }
                 } else if (filter.getOperation().equals(FilterOperation.LTE)) {
-                    predicates.add(criteriaBuilder.lessThanOrEqualTo(
-                            from.get(filter.getField().getName()),
-                            filter.getValue()
-                    ));
+                    if (isEnum) {
+                        predicates.add(criteriaBuilder.lessThanOrEqualTo(
+                                from.get(filter.getField().getName()),
+                                category
+                        ));
+                    } else {
+                        predicates.add(criteriaBuilder.lessThanOrEqualTo(
+                                from.get(filter.getField().getName()),
+                                filter.getValue()
+                        ));
+                    }
                 }
             }
             criteriaQuery.select(from).where(criteriaBuilder.and(predicates.toArray(new Predicate[0])));

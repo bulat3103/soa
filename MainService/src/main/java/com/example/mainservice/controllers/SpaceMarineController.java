@@ -126,7 +126,7 @@ public class SpaceMarineController {
     }
 
     private List<Sort> getSortParameters(List<String> list) {
-        List<String> sortOps = Stream.of(SortOperation.values()).map(e -> e.toString().toLowerCase()).collect(Collectors.toList());
+        List<String> sortOps = Stream.of(SortOperation.values()).map(Enum::toString).collect(Collectors.toList());
         List<Sort> sorts = new ArrayList<>();
         for (String sortP : list) {
             String[] split = sortP.split("=");
@@ -136,7 +136,7 @@ public class SpaceMarineController {
             if (!AvailableFields.checkContains(split[0])) {
                 throw new InvalidParamException("Validation failed");
             }
-            if (!sortOps.contains(split[1])) {
+            if (!sortOps.contains(split[1].toUpperCase())) {
                 throw new InvalidParamException("Validation failed");
             }
             sorts.add(new Sort(
@@ -156,20 +156,18 @@ public class SpaceMarineController {
                 if (!AvailableFields.checkContains(field)) {
                     throw new InvalidParamException("Validation failed");
                 }
-                if (!FilterOperation.checkContains(op)) {
+                if (!FilterOperation.checkContains(op.toUpperCase())) {
                     throw new InvalidParamException("Validation failed");
                 }
                 checkNumberFields(field, value);
-                if (field.equals(AvailableFields.NAME.getName())
-                        || field.equals(AvailableFields.ACHIEVEMENTS.getName())
-                        || field.equals(AvailableFields.CATEGORY.getName()))
-                {
-                    if (!op.equalsIgnoreCase(FilterOperation.EQ.toString())
-                            && !op.equalsIgnoreCase(FilterOperation.NE.toString()))
-                    {
-                        throw new InvalidParamException("Validation failed");
-                    }
-                }
+//                if (field.equals(AvailableFields.CATEGORY.getName()))
+//                {
+//                    if (!op.equalsIgnoreCase(FilterOperation.EQ.toString())
+//                            && !op.equalsIgnoreCase(FilterOperation.NE.toString()))
+//                    {
+//                        throw new InvalidParamException("Validation failed");
+//                    }
+//                }
                 filters.add(new Filter(
                         AvailableFields.getByName(field),
                         FilterOperation.valueOf(op.toUpperCase()),

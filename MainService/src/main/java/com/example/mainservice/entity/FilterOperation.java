@@ -15,8 +15,7 @@ public enum FilterOperation {
     public static boolean checkContains(String name) {
         List<String> collect = Stream.of(FilterOperation.values())
                 .map(Enum::toString)
-                .map(String::toLowerCase)
                 .collect(Collectors.toList());
-        return collect.contains(name.toLowerCase());
+        return collect.contains(name);
     }
 }
