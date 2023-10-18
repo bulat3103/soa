@@ -53,26 +53,8 @@ public class SpaceMarine {
     private Integer chapterMarinesCount;
 
     @ManyToOne
-    @JoinColumn(name = "starship_id")
-    private StarShip starShip;
-
-    @Column(name = "starship_id", insertable = false, updatable = false)
-    private Long starshipId;
-
-    @Column(name = "starship_name", insertable = false, updatable = false)
-    private String starshipName;
-
-    @Column(name = "starship_coordinates_x", insertable = false, updatable = false)
-    private Long starshipCoordinatesX;
-
-    @Column(name = "starship_coordinates_y", insertable = false, updatable = false)
-    private Double starshipCoordinatesY;
-
-    @Column(name = "starship_crew_count", insertable = false, updatable = false)
-    private Integer starshipCrewCount;
-
-    @Column(name = "starship_health", insertable = false, updatable = false)
-    private Integer starshipHealth;
+    @JoinColumn(name = "starship")
+    private StarShip starship;
 
     public static SpaceMarineResponseDto buildResponseDto(SpaceMarine spaceMarine) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -92,16 +74,16 @@ public class SpaceMarine {
                         spaceMarine.getChapterName(),
                         spaceMarine.getChapterMarinesCount()
                 ),
-                spaceMarine.getStarShip() == null ? null :
+                spaceMarine.getStarship() == null ? null :
                         new StarShipResponseDto(
-                                spaceMarine.getStarShip().getId(),
-                                spaceMarine.getStarShip().getName(),
+                                spaceMarine.getStarship().getId(),
+                                spaceMarine.getStarship().getName(),
                                 new CoordinatesResponseDto(
-                                        spaceMarine.getStarShip().getCoordinateX(),
-                                        spaceMarine.getStarShip().getCoordinateY()
+                                        spaceMarine.getStarship().getCoordinateX(),
+                                        spaceMarine.getStarship().getCoordinateY()
                                 ),
-                                spaceMarine.getStarShip().getCrewCount(),
-                                spaceMarine.getStarShip().getHealth()
+                                spaceMarine.getStarship().getCrewCount(),
+                                spaceMarine.getStarship().getHealth()
                         )
         );
     }

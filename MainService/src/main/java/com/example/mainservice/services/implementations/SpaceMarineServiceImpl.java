@@ -30,12 +30,12 @@ public class SpaceMarineServiceImpl implements SpaceMarineService {
         SpaceMarineBuildDtoValidator.validate(spaceMarineBuildDto);
         SpaceMarine spaceMarine = BuildEntityFromDtos.buildSpaceMarine(spaceMarineBuildDto);
         if (spaceMarineBuildDto.getStarshipId() == null) {
-            spaceMarine.setStarShip(null);
+            spaceMarine.setStarship(null);
             return SpaceMarine.buildResponseDto(spaceMarineRepository.save(spaceMarine));
         }
         StarShip starShip = shipRepository.getById(Long.parseLong(spaceMarineBuildDto.getStarshipId()));
         if (starShip == null) throw new NotFoundException("Not found");
-        spaceMarine.setStarShip(starShip);
+        spaceMarine.setStarship(starShip);
         return SpaceMarine.buildResponseDto(spaceMarineRepository.save(spaceMarine));
     }
 
@@ -46,12 +46,12 @@ public class SpaceMarineServiceImpl implements SpaceMarineService {
         if (spaceMarine == null) throw new NotFoundException("Not found");
         BuildEntityFromDtos.buildCommonSpaceMarineFields(spaceMarine, spaceMarineBuildDto);
         if (spaceMarineBuildDto.getStarshipId() == null) {
-            spaceMarine.setStarShip(null);
+            spaceMarine.setStarship(null);
             return SpaceMarine.buildResponseDto(spaceMarineRepository.save(spaceMarine));
         }
         StarShip starShip = shipRepository.getById(Long.parseLong(spaceMarineBuildDto.getStarshipId()));
         if (starShip == null) throw new NotFoundException("Not found");
-        spaceMarine.setStarShip(starShip);
+        spaceMarine.setStarship(starShip);
         return SpaceMarine.buildResponseDto(spaceMarineRepository.save(spaceMarine));
     }
 

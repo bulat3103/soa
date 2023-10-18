@@ -30,6 +30,6 @@ public class StarShip {
     @Column(name = "health")
     private Integer health;
 
-    @OneToMany(mappedBy = "starShip", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "starship", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Set<SpaceMarine> spaceMarines;
 }

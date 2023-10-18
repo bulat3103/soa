@@ -160,14 +160,6 @@ public class SpaceMarineController {
                     throw new InvalidParamException("Validation failed");
                 }
                 checkNumberFields(field, value);
-//                if (field.equals(AvailableFields.CATEGORY.getName()))
-//                {
-//                    if (!op.equalsIgnoreCase(FilterOperation.EQ.toString())
-//                            && !op.equalsIgnoreCase(FilterOperation.NE.toString()))
-//                    {
-//                        throw new InvalidParamException("Validation failed");
-//                    }
-//                }
                 filters.add(new Filter(
                         AvailableFields.getByName(field),
                         FilterOperation.valueOf(op.toUpperCase()),
@@ -181,10 +173,10 @@ public class SpaceMarineController {
     }
 
     private void checkNumberFields(String field, String value) {
-        if (field.equals(AvailableFields.ID.getName())
-                || field.equals(AvailableFields.HEALTH.getName())
-                || field.equals(AvailableFields.HEART_COUNT.getName())
-                || field.equals(AvailableFields.STARSHIP_ID.getName()))
+        if (field.equals(AvailableFields.HEART_COUNT.getName())
+                || field.equals(AvailableFields.CHAPTER_MARINES_COUNT.getName())
+                || field.equals(AvailableFields.STARSHIP_CREW_COUNT.getName())
+                || field.equals(AvailableFields.STARSHIP_HEALTH.getName()))
         {
             try {
                 Integer.parseInt(value);
@@ -193,7 +185,7 @@ public class SpaceMarineController {
             }
         }
         if (field.equals(AvailableFields.ID.getName())
-                || field.equals(AvailableFields.STARSHIP_ID.getName())
+                || field.equals(AvailableFields.STARSHIP.getName())
                 || field.equals(AvailableFields.COORDINATES_X.getName())
                 || field.equals(AvailableFields.STARSHIP_COORDINATES_X.getName()))
         {

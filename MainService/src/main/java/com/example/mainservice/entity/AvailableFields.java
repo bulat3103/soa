@@ -7,28 +7,31 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum AvailableFields {
-    ID("id"),
-    NAME("name"),
-    COORDINATES_X("coordinatesX"),
-    COORDINATES_Y("coordinatesY"),
-    HEALTH("health"),
-    HEART_COUNT("heartCount"),
-    ACHIEVEMENTS("achievements"),
-    CATEGORY("category"),
-    CHAPTER_NAME("chapterName"),
-    CHAPTER_MARINES_COUNT("chapterMarinesCount"),
-    STARSHIP_ID("starshipId"),
-    STARSHIP_NAME("starshipName"),
-    STARSHIP_COORDINATES_X("starshipCoordinatesX"),
-    STARSHIP_COORDINATES_Y("starshipCoordinatesY"),
-    STARSHIP_CREW_COUNT("starshipCrewCount"),
-    STARSHIP_HEALTH("starshipHealth");
+    ID("id", null),
+    NAME("name", null),
+    COORDINATES_X("coordinatesX", null),
+    COORDINATES_Y("coordinatesY", null),
+    HEALTH("health", null),
+    HEART_COUNT("heartCount", null),
+    ACHIEVEMENTS("achievements", null),
+    CATEGORY("category", null),
+    CHAPTER_NAME("chapterName", null),
+    CHAPTER_MARINES_COUNT("chapterMarinesCount", null),
+    STARSHIP("starship", "id"),
+    STARSHIP_NAME("starshipName", "name"),
+    STARSHIP_COORDINATES_X("starshipCoordinatesX", "coordinatesX"),
+    STARSHIP_COORDINATES_Y("starshipCoordinatesY", "coordinatesY"),
+    STARSHIP_CREW_COUNT("starshipCrewCount", "crewCount"),
+    STARSHIP_HEALTH("starshipHealth", "health");
 
     @Getter
     private final String name;
+    @Getter
+    private final String starshipTableName;
 
-    AvailableFields(String name) {
+    AvailableFields(String name, String starshipTableName) {
         this.name = name;
+        this.starshipTableName = starshipTableName;
     }
 
     public static boolean checkContains(String name) {
