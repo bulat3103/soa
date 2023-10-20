@@ -4,7 +4,7 @@ import com.example.extraservice.model.request.SpaceMarineBuildDto;
 import com.example.extraservice.model.request.StarShipCreateDto;
 import com.example.extraservice.model.response.ListSpaceMarine;
 import com.example.extraservice.model.response.SpaceMarineResponseDto;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -15,16 +15,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class RestClient implements InitializingBean {
-    private RestTemplate restTemplate;
+public class RestClient {
+    private final RestTemplate restTemplate;
 
     @Value("${main-service.url}")
     private String mainServiceUrl;
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        SSLValidation.sslCheckingOff();
-        restTemplate = new RestTemplate();
+    @Autowired
+    public RestClient(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     public ResponseEntity<?> createStarShip(StarShipCreateDto dto) {
