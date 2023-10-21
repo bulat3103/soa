@@ -43,7 +43,7 @@ public class SpaceMarineController {
             id = Long.parseLong(idStr);
             return Response.ok().entity(spaceMarineService.getSpaceMarineById(id)).build();
         } catch (NumberFormatException e) {
-            throw new InvalidParamException("Invalid id value");
+            throw new InvalidParamException("Validation failed");
         }
     }
 
@@ -79,7 +79,7 @@ public class SpaceMarineController {
                 getFilterParameters(filter),
                 pageInt,
                 pageSizeInt);
-        if (spaceMarines.isEmpty()) throw new NotFoundException("SpaceMarines weren't found");
+        if (spaceMarines.isEmpty()) throw new NotFoundException("Not found");
         return Response.ok().entity(spaceMarines).build();
     }
 

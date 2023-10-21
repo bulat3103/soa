@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StarShipCreateDto {
-    private Long id;
+    private String id;
     private String name;
-    private Coordinates coordinates;
-    private Integer crewCount;
-    private Integer health;
+    private CoordinatesRequestDto coordinates;
+    private String crewCount;
+    private String health;
 }

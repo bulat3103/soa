@@ -12,5 +12,5 @@ import java.sql.Timestamp;
 public class Error {
     private Integer code;
     private String message;
-    private Timestamp time;
+    private String time;
 }

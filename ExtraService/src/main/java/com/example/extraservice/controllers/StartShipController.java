@@ -2,6 +2,7 @@ package com.example.extraservice.controllers;
 
 import com.example.extraservice.model.request.StarShipCreateDto;
 import com.example.extraservice.services.StarShipService;
+import com.example.extraservice.utils.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,15 +22,27 @@ public class StartShipController {
 
     @PostMapping(value = "/create/{id}/{name}")
     public ResponseEntity<?> createNewStarShip(
-            @PathVariable("id") Long id,
+            @PathVariable("id") String idStr,
             @PathVariable("name") String name,
             @RequestBody StarShipCreateDto starShipCreateDto)
     {
-        return starShipService.createNewStarShip(id, name, starShipCreateDto);
+        long id;
+        try {
+            id = Long.parseLong(idStr);
+            return starShipService.createNewStarShip(id, name, starShipCreateDto);
+        } catch (NumberFormatException e) {
+            return ErrorResponse.buildResponse(400, "Validation failed");
+        }
     }
 
     @PostMapping(value = "/{id}/unload-all")
-    public ResponseEntity<?> unloadAll(@PathVariable("id") Long id) {
+    public ResponseEntity<?> unloadAll(@PathVariable("id") String idStr) {
+        long id;
+        try {
+            id = Long.parseLong(idStr);
+        } catch (NumberFormatException e) {
+            return ErrorResponse.buildResponse(400, "Validation failed");
+        }
         return starShipService.unloadAll(id);
     }
 }
