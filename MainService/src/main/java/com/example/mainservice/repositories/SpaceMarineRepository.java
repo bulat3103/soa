@@ -144,13 +144,25 @@ public class SpaceMarineRepository {
             List<Order> order = new ArrayList<>();
             for (Sort sort : sorts) {
                 if (sort.getOperation().equals(SortOperation.ASC)) {
-                    order.add(criteriaBuilder.asc(
-                            from.get(sort.getField().getName())
-                    ));
+                    if (sort.getField().getStarshipTableName() != null) {
+                        order.add(criteriaBuilder.asc(
+                                from.get("starship").get(sort.getField().getStarshipTableName())
+                        ));
+                    } else {
+                        order.add(criteriaBuilder.asc(
+                                from.get(sort.getField().getName())
+                        ));
+                    }
                 } else if (sort.getOperation().equals(SortOperation.DESC)) {
-                    order.add(criteriaBuilder.desc(
-                            from.get(sort.getField().getName())
-                    ));
+                    if (sort.getField().getStarshipTableName() != null) {
+                        order.add(criteriaBuilder.desc(
+                                from.get("starship").get(sort.getField().getStarshipTableName())
+                        ));
+                    } else {
+                        order.add(criteriaBuilder.desc(
+                                from.get(sort.getField().getName())
+                        ));
+                    }
                 }
             }
             criteriaQuery.select(from).orderBy(order);

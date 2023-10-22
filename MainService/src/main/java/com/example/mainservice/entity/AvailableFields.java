@@ -9,8 +9,8 @@ import java.util.stream.Stream;
 public enum AvailableFields {
     ID("id", null),
     NAME("name", null),
-    COORDINATES_X("coordinatesX", null),
-    COORDINATES_Y("coordinatesY", null),
+    COORDINATE_X("coordinateX", null),
+    COORDINATE_Y("coordinateY", null),
     HEALTH("health", null),
     HEART_COUNT("heartCount", null),
     ACHIEVEMENTS("achievements", null),
@@ -19,8 +19,8 @@ public enum AvailableFields {
     CHAPTER_MARINES_COUNT("chapterMarinesCount", null),
     STARSHIP("starship", "id"),
     STARSHIP_NAME("starshipName", "name"),
-    STARSHIP_COORDINATES_X("starshipCoordinatesX", "coordinatesX"),
-    STARSHIP_COORDINATES_Y("starshipCoordinatesY", "coordinatesY"),
+    STARSHIP_COORDINATE_X("starshipCoordinateX", "coordinateX"),
+    STARSHIP_COORDINATE_Y("starshipCoordinateY", "coordinateY"),
     STARSHIP_CREW_COUNT("starshipCrewCount", "crewCount"),
     STARSHIP_HEALTH("starshipHealth", "health");
 

@@ -79,7 +79,6 @@ public class SpaceMarineController {
                 getFilterParameters(filter),
                 pageInt,
                 pageSizeInt);
-        if (spaceMarines.isEmpty()) throw new NotFoundException("Not found");
         return Response.ok().entity(spaceMarines).build();
     }
 
@@ -186,8 +185,8 @@ public class SpaceMarineController {
         }
         if (field.equals(AvailableFields.ID.getName())
                 || field.equals(AvailableFields.STARSHIP.getName())
-                || field.equals(AvailableFields.COORDINATES_X.getName())
-                || field.equals(AvailableFields.STARSHIP_COORDINATES_X.getName()))
+                || field.equals(AvailableFields.COORDINATE_X.getName())
+                || field.equals(AvailableFields.STARSHIP_COORDINATE_X.getName()))
         {
             try {
                 Long.parseLong(value);
@@ -195,9 +194,9 @@ public class SpaceMarineController {
                 throw new InvalidParamException("Validation failed");
             }
         }
-        if (field.equals(AvailableFields.COORDINATES_Y.getName())
+        if (field.equals(AvailableFields.COORDINATE_Y.getName())
                 || field.equals(AvailableFields.HEALTH.getName())
-                || field.equals(AvailableFields.STARSHIP_COORDINATES_Y.getName()))
+                || field.equals(AvailableFields.STARSHIP_COORDINATE_Y.getName()))
         {
             try {
                 Double.parseDouble(value);
