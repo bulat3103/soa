@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Chapter {
     private String name;
-    private Integer spaceMarinesCount;
+    private Integer marinesCount;
 }

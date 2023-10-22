@@ -1,6 +1,5 @@
 package com.example.extraservice.model.request;
 
-import com.example.extraservice.model.Coordinates;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

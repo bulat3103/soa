@@ -3,7 +3,6 @@ package com.example.extraservice.services.implementation;
 import com.example.extraservice.exceptions.InvalidParamException;
 import com.example.extraservice.model.request.SpaceMarineBuildDto;
 import com.example.extraservice.model.request.StarShipCreateDto;
-import com.example.extraservice.model.response.ListSpaceMarine;
 import com.example.extraservice.model.response.SpaceMarineResponseDto;
 import com.example.extraservice.services.StarShipService;
 import com.example.extraservice.utils.ErrorResponse;
@@ -29,15 +28,19 @@ public class StarShipServiceImpl implements StarShipService {
     @Override
     public ResponseEntity<?> unloadAll(Long id) {
         try {
-            ResponseEntity<ListSpaceMarine> responseEntity = restClient.getSpaceMarines(id);
-            ListSpaceMarine listSpaceMarine = responseEntity.getBody();
-            List<SpaceMarineResponseDto> marinesUpdated = new ArrayList<>();
-            for (SpaceMarineResponseDto dto : listSpaceMarine.getSpaceMarines()) {
+            ResponseEntity<List<SpaceMarineResponseDto>> responseEntity = restClient.getSpaceMarines(id);
+            if (responseEntity.getBody() == null) {
+                return ErrorResponse.buildResponse(404, "Not found");
+            }
+            List<SpaceMarineResponseDto> listSpaceMarine = responseEntity.getBody();
+            for (SpaceMarineResponseDto dto : listSpaceMarine) {
                 SpaceMarineBuildDto spaceMarineBuildDto = buildFromResponse(dto);
                 ResponseEntity<SpaceMarineResponseDto> updated = restClient.updateSpacemarine(dto.getId(), spaceMarineBuildDto);
-                marinesUpdated.add(updated.getBody());
+                if (updated.getStatusCode().value() != 200) {
+                    return ErrorResponse.buildResponse(500, "Internal server error");
+                }
             }
-            return ResponseEntity.ok(new ListSpaceMarine(marinesUpdated));
+            return ResponseEntity.ok().build();
         } catch (HttpClientErrorException.NotFound e) {
             return ErrorResponse.buildResponse(404, "Not found");
         } catch (HttpClientErrorException.BadRequest e) {
