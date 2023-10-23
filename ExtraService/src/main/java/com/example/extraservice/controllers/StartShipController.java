@@ -15,11 +15,13 @@ public class StartShipController {
         this.starShipService = starShipService;
     }
 
+    @CrossOrigin
     @GetMapping(value = "/hello")
     public String hello() {
         return "Hello, World!";
     }
 
+    @CrossOrigin
     @PostMapping(value = "/create/{id}/{name}")
     public ResponseEntity<?> createNewStarShip(
             @PathVariable("id") String idStr,
@@ -35,6 +37,7 @@ public class StartShipController {
         }
     }
 
+    @CrossOrigin
     @PostMapping(value = "/{id}/unload-all")
     public ResponseEntity<?> unloadAll(@PathVariable("id") String idStr) {
         long id;
