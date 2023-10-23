@@ -30,13 +30,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Path("/spacemarines")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class SpaceMarineController {
     @Inject
     private SpaceMarineService spaceMarineService;
 
     @GET
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getSpaceMarineById(@PathParam("id") String idStr) {
         long id;
         try {
@@ -48,8 +49,6 @@ public class SpaceMarineController {
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSpaceMarines(@Context HttpServletRequest request) {
         String[] sortParameters = request.getParameterValues("sort");
         String[] filterParameters = request.getParameterValues("filter");
@@ -83,8 +82,6 @@ public class SpaceMarineController {
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response createSpaceMarine(SpaceMarineBuildDto spaceMarineBuildDto) {
         SpaceMarineResponseDto spaceMarine = spaceMarineService.createSpaceMarine(spaceMarineBuildDto);
         return Response.ok().entity(spaceMarine).build();
@@ -92,8 +89,6 @@ public class SpaceMarineController {
 
     @PUT
     @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response updateSpaceMarine(@PathParam("id") String idStr, SpaceMarineBuildDto spaceMarineBuildDto) {
         long id;
         try {
@@ -107,7 +102,6 @@ public class SpaceMarineController {
 
     @DELETE
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteSpaceMarineById(@PathParam("id") String idStr) {
         Map<String, Object> map = new HashMap<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");

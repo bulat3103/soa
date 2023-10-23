@@ -2,6 +2,7 @@ package com.example.mainservice.services.implementations;
 
 import com.example.mainservice.entity.SpaceMarine;
 import com.example.mainservice.entity.StarShip;
+import com.example.mainservice.exceptions.NotFoundException;
 import com.example.mainservice.model.Filter;
 import com.example.mainservice.model.Sort;
 import com.example.mainservice.model.request.SpaceMarineBuildDto;
@@ -14,7 +15,6 @@ import com.example.mainservice.validators.SpaceMarineBuildDtoValidator;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
