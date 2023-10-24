@@ -52,7 +52,7 @@ public class RestClient {
                 .encode()
                 .toUriString();
         Map<String, String> params = new HashMap<>();
-        params.put("filter", "id[eq]=" + starShipId);
+        params.put("filter", "starship[eq]=" + starShipId);
         return restTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<List<SpaceMarineResponseDto>>() {}, params);
     }
 }
