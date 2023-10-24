@@ -12,9 +12,7 @@ import com.example.mainservice.services.interfaces.SpaceMarineService;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.ZoneOffset;
@@ -49,11 +47,12 @@ public class SpaceMarineController {
     }
 
     @GET
-    public Response getAllSpaceMarines(@Context HttpServletRequest request) {
-        String[] sortParameters = request.getParameterValues("sort");
-        String[] filterParameters = request.getParameterValues("filter");
-        String page = request.getParameter("page");
-        String pageSize = request.getParameter("pageSize");
+    public Response getAllSpaceMarines(
+            @QueryParam("page") String page,
+            @QueryParam("pageSize") String pageSize,
+            @QueryParam("sort") List<String> sortParameters,
+            @QueryParam("filter") List<String> filterParameters)
+    {
         int pageInt, pageSizeInt;
         try {
             pageInt = StringUtils.isEmpty(page) ? 1 : Integer.parseInt(page);
@@ -69,10 +68,10 @@ public class SpaceMarineController {
         }
         List<String> sort;
         if (sortParameters == null) sort = new ArrayList<>();
-        else sort = Stream.of(sortParameters).filter(StringUtils::isNotEmpty).collect(Collectors.toList());
+        else sort = sortParameters.stream().filter(StringUtils::isEmpty).collect(Collectors.toList());
         List<String> filter;
         if (filterParameters == null) filter = new ArrayList<>();
-        else filter = Stream.of(filterParameters).filter(StringUtils::isNotEmpty).collect(Collectors.toList());
+        else filter = filterParameters.stream().filter(StringUtils::isNotEmpty).collect(Collectors.toList());
         List<SpaceMarineResponseDto> spaceMarines = spaceMarineService.getAllSpaceMarines(
                 getSortParameters(sort),
                 getFilterParameters(filter),

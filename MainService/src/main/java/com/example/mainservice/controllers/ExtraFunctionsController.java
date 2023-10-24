@@ -7,9 +7,7 @@ import com.example.mainservice.services.interfaces.ExtraFunctionsService;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -25,8 +23,7 @@ public class ExtraFunctionsController {
 
     @GET
     @Path("/lower-achieves")
-    public Response getLowerAchieves(@Context HttpServletRequest request) {
-        String achieve = request.getParameter("achieve");
+    public Response getLowerAchieves(@QueryParam("achieve") String achieve) {
         if (StringUtils.isEmpty(achieve) || StringUtils.isBlank(achieve)) {
             throw new InvalidParamException("Validation failed");
         }
@@ -35,9 +32,7 @@ public class ExtraFunctionsController {
 
     @GET
     @Path("/pattern")
-    public Response getByPattern(@Context HttpServletRequest request) {
-        String field = request.getParameter("field");
-        String value = request.getParameter("value");
+    public Response getByPattern(@QueryParam("field") String field, @QueryParam("value") String value) {
         if (StringUtils.isEmpty(field)) {
             throw new InvalidParamException("Validation failed");
         } else {
