@@ -5,12 +5,12 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException> {
+public class RuntimeExceptionMapper implements ExceptionMapper<Throwable> {
     @Override
-    public Response toResponse(RuntimeException e) {
+    public Response toResponse(Throwable e) {
         return ErrorBuildResponseUtils.buildResponse(
-                Response.Status.INTERNAL_SERVER_ERROR,
-                "Internal server error"
+                Response.Status.NOT_FOUND,
+                "Not found"
         );
     }
 }

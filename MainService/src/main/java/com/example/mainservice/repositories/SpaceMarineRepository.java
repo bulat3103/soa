@@ -31,6 +31,7 @@ public class SpaceMarineRepository {
         CriteriaBuilder criteriaBuilder = managerProvider.getEm().getCriteriaBuilder();
         CriteriaQuery<SpaceMarine> criteriaQuery = criteriaBuilder.createQuery(SpaceMarine.class);
         Root<SpaceMarine> from = criteriaQuery.from(SpaceMarine.class);
+        CriteriaQuery<SpaceMarine> select = criteriaQuery.select(from);
         if (!filters.isEmpty()) {
             List<Predicate> predicates = new ArrayList<>();
             for (Filter filter: filters) {
@@ -138,7 +139,7 @@ public class SpaceMarineRepository {
                     }
                 }
             }
-            criteriaQuery.select(from).where(criteriaBuilder.and(predicates.toArray(new Predicate[0])));
+            select.where(criteriaBuilder.and(predicates.toArray(new Predicate[0])));
         }
         if (!sorts.isEmpty()) {
             List<Order> order = new ArrayList<>();
@@ -165,9 +166,9 @@ public class SpaceMarineRepository {
                     }
                 }
             }
-            criteriaQuery.select(from).orderBy(order);
+            select.orderBy(order);
         }
-        return managerProvider.getEm().createQuery(criteriaQuery)
+        return managerProvider.getEm().createQuery(select)
                 .setFirstResult((page - 1) * limit)
                 .setMaxResults(limit)
                 .getResultList();

@@ -3,6 +3,7 @@ package com.example.mainservice.controllers;
 import com.example.mainservice.entity.AvailablePatternFields;
 import com.example.mainservice.exceptions.InvalidParamException;
 import com.example.mainservice.model.response.UniqueHeart;
+import com.example.mainservice.exceptions.NotFoundException;
 import com.example.mainservice.services.interfaces.ExtraFunctionsService;
 import org.apache.commons.lang3.StringUtils;
 
