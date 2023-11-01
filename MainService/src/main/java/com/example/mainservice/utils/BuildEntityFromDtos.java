@@ -16,7 +16,7 @@ public class BuildEntityFromDtos {
         spaceMarine.setHealth(Double.parseDouble(spaceMarineBuildDto.getHealth()));
         spaceMarine.setHeartCount(Integer.parseInt(spaceMarineBuildDto.getHeartCount()));
         spaceMarine.setAchievements(spaceMarineBuildDto.getAchievements());
-        spaceMarine.setCategory(AstartesCategory.valueOf(spaceMarineBuildDto.getCategory().toUpperCase()));
+        spaceMarine.setCategory(spaceMarineBuildDto.getCategory().toUpperCase());
         spaceMarine.setChapterName(spaceMarineBuildDto.getChapter().getName());
         spaceMarine.setChapterMarinesCount(Integer.parseInt(spaceMarineBuildDto.getChapter().getMarinesCount()));
     }

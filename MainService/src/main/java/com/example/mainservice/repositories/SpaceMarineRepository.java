@@ -34,108 +34,78 @@ public class SpaceMarineRepository {
         CriteriaQuery<SpaceMarine> select = criteriaQuery.select(from);
         if (!filters.isEmpty()) {
             List<Predicate> predicates = new ArrayList<>();
-            for (Filter filter: filters) {
-                boolean isEnum = filter.getField().equals(AvailableFields.CATEGORY);
-                AstartesCategory category = AstartesCategory.getFilter(filter.getValue(), filter.getOperation());
+            for (Filter filter : filters) {
                 if (filter.getOperation().equals(FilterOperation.EQ)) {
                     if (filter.getField().getStarshipTableName() != null) {
                         predicates.add(criteriaBuilder.equal(
                                 from.get("starship").get(filter.getField().getStarshipTableName()),
-                                isEnum ? category: filter.getValue()
+                                filter.getValue()
                         ));
                     } else {
                         predicates.add(criteriaBuilder.equal(
                                 from.get(filter.getField().getName()),
-                                isEnum ? category: filter.getValue()
+                                filter.getValue()
                         ));
                     }
                 } else if (filter.getOperation().equals(FilterOperation.NE)) {
                     if (filter.getField().getStarshipTableName() != null) {
                         predicates.add(criteriaBuilder.notEqual(
                                 from.get("starship").get(filter.getField().getStarshipTableName()),
-                                isEnum ? category: filter.getValue()
+                                filter.getValue()
                         ));
                     } else {
                         predicates.add(criteriaBuilder.notEqual(
                                 from.get(filter.getField().getName()),
-                                isEnum ? category: filter.getValue()
+                                filter.getValue()
                         ));
                     }
                 } else if (filter.getOperation().equals(FilterOperation.GT)) {
-                    if (isEnum) {
+                    if (filter.getField().getStarshipTableName() != null) {
+                        predicates.add(criteriaBuilder.greaterThan(
+                                from.get("starship").get(filter.getField().getStarshipTableName()),
+                                filter.getValue()
+                        ));
+                    } else {
                         predicates.add(criteriaBuilder.greaterThan(
                                 from.get(filter.getField().getName()),
-                                category
+                                filter.getValue()
                         ));
-                    } else {
-                        if (filter.getField().getStarshipTableName() != null) {
-                            predicates.add(criteriaBuilder.greaterThan(
-                                    from.get("starship").get(filter.getField().getStarshipTableName()),
-                                    filter.getValue()
-                            ));
-                        } else {
-                            predicates.add(criteriaBuilder.greaterThan(
-                                    from.get(filter.getField().getName()),
-                                    filter.getValue()
-                            ));
-                        }
                     }
                 } else if (filter.getOperation().equals(FilterOperation.LT)) {
-                    if (isEnum) {
+                    if (filter.getField().getStarshipTableName() != null) {
+                        predicates.add(criteriaBuilder.lessThan(
+                                from.get("starship").get(filter.getField().getStarshipTableName()),
+                                filter.getValue()
+                        ));
+                    } else {
                         predicates.add(criteriaBuilder.lessThan(
                                 from.get(filter.getField().getName()),
-                                category
+                                filter.getValue()
                         ));
-                    } else {
-                        if (filter.getField().getStarshipTableName() != null) {
-                            predicates.add(criteriaBuilder.lessThan(
-                                    from.get("starship").get(filter.getField().getStarshipTableName()),
-                                    filter.getValue()
-                            ));
-                        } else {
-                            predicates.add(criteriaBuilder.lessThan(
-                                    from.get(filter.getField().getName()),
-                                    filter.getValue()
-                            ));
-                        }
                     }
                 } else if (filter.getOperation().equals(FilterOperation.GTE)) {
-                    if (isEnum) {
+                    if (filter.getField().getStarshipTableName() != null) {
+                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+                                from.get("starship").get(filter.getField().getStarshipTableName()),
+                                filter.getValue()
+                        ));
+                    } else {
                         predicates.add(criteriaBuilder.greaterThanOrEqualTo(
                                 from.get(filter.getField().getName()),
-                                category
+                                filter.getValue()
                         ));
-                    } else {
-                        if (filter.getField().getStarshipTableName() != null) {
-                            predicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                                    from.get("starship").get(filter.getField().getStarshipTableName()),
-                                    filter.getValue()
-                            ));
-                        } else {
-                            predicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                                    from.get(filter.getField().getName()),
-                                    filter.getValue()
-                            ));
-                        }
                     }
                 } else if (filter.getOperation().equals(FilterOperation.LTE)) {
-                    if (isEnum) {
+                    if (filter.getField().getStarshipTableName() != null) {
                         predicates.add(criteriaBuilder.lessThanOrEqualTo(
-                                from.get(filter.getField().getName()),
-                                category
+                                from.get("starship").get(filter.getField().getStarshipTableName()),
+                                filter.getValue()
                         ));
                     } else {
-                        if (filter.getField().getStarshipTableName() != null) {
-                            predicates.add(criteriaBuilder.lessThanOrEqualTo(
-                                    from.get("starship").get(filter.getField().getStarshipTableName()),
-                                    filter.getValue()
-                            ));
-                        } else {
-                            predicates.add(criteriaBuilder.lessThanOrEqualTo(
-                                    from.get(filter.getField().getName()),
-                                    filter.getValue()
-                            ));
-                        }
+                        predicates.add(criteriaBuilder.lessThanOrEqualTo(
+                                from.get(filter.getField().getName()),
+                                filter.getValue()
+                        ));
                     }
                 }
             }

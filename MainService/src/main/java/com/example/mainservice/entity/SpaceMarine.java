@@ -43,8 +43,7 @@ public class SpaceMarine {
     private String achievements;
 
     @Column(name = "category")
-    @Enumerated(EnumType.STRING)
-    private AstartesCategory category;
+    private String category;
 
     @Column(name = "chapter_name")
     private String chapterName;
@@ -69,7 +68,7 @@ public class SpaceMarine {
                 spaceMarine.getHealth(),
                 spaceMarine.getHeartCount(),
                 spaceMarine.getAchievements(),
-                spaceMarine.getCategory(),
+                AstartesCategory.valueOf(spaceMarine.getCategory()),
                 new ChapterResponseDto(
                         spaceMarine.getChapterName(),
                         spaceMarine.getChapterMarinesCount()
