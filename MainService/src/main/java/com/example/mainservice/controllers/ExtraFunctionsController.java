@@ -6,34 +6,38 @@ import com.example.mainservice.model.response.UniqueHeart;
 import com.example.mainservice.exceptions.NotFoundException;
 import com.example.mainservice.services.interfaces.ExtraFunctionsService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Path("/spacemarines")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@RestController
+@RequestMapping("/spacemarines")
 public class ExtraFunctionsController {
-    @Inject
-    private ExtraFunctionsService extraFunctionsService;
+    private final ExtraFunctionsService extraFunctionsService;
 
-    @GET
-    @Path("/lower-achieves")
-    public Response getLowerAchieves(@QueryParam("achieve") String achieve) {
+    @Autowired
+    public ExtraFunctionsController(ExtraFunctionsService extraFunctionsService) {
+        this.extraFunctionsService = extraFunctionsService;
+    }
+
+    @GetMapping("/lower-achieves")
+    public ResponseEntity<?> getLowerAchieves(@RequestParam("achieve") String achieve) {
         if (StringUtils.isEmpty(achieve) || StringUtils.isBlank(achieve)) {
             throw new InvalidParamException("Validation failed");
         }
-        return Response.ok().entity(extraFunctionsService.getLowerAchieves(achieve)).build();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(extraFunctionsService.getLowerAchieves(achieve));
     }
 
-    @GET
-    @Path("/pattern")
-    public Response getByPattern(@QueryParam("field") String field, @QueryParam("value") String value) {
+    @GetMapping("/pattern")
+    public ResponseEntity<?> getByPattern(@RequestParam("field") String field, @RequestParam("value") String value) {
         if (StringUtils.isEmpty(field)) {
             throw new InvalidParamException("Validation failed");
         } else {
@@ -48,16 +52,15 @@ public class ExtraFunctionsController {
         if (StringUtils.isEmpty(value)) {
             throw new InvalidParamException("Validation failed");
         }
-        return Response.ok().entity(extraFunctionsService.getByPattern(field, value)).build();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(extraFunctionsService.getByPattern(field, value));
     }
 
-    @GET
-    @Path("/unique/heart")
-    public Response getUniqueHeart() {
+    @GetMapping("/unique/heart")
+    public ResponseEntity<?> getUniqueHeart() {
         UniqueHeart uniqueHeartCount = extraFunctionsService.getUniqueHeartCount();
         if (uniqueHeartCount.getHearts().isEmpty()) {
             throw new NotFoundException("Not found");
         }
-        return Response.ok().entity(extraFunctionsService.getUniqueHeartCount().getHearts()).build();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(extraFunctionsService.getUniqueHeartCount().getHearts());
     }
 }

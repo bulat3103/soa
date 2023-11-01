@@ -10,13 +10,13 @@ import com.example.mainservice.model.request.SpaceMarineBuildDto;
 import com.example.mainservice.model.response.SpaceMarineResponseDto;
 import com.example.mainservice.services.interfaces.SpaceMarineService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,27 +29,29 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Path("/spacemarines")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+@RestController
+@RequestMapping("/spacemarines")
 public class SpaceMarineController {
-    @Inject
-    private SpaceMarineService spaceMarineService;
+    private final SpaceMarineService spaceMarineService;
 
-    @GET
-    @Path("/{id}")
-    public Response getSpaceMarineById(@PathParam("id") String idStr) {
+    @Autowired
+    public SpaceMarineController(SpaceMarineService spaceMarineService) {
+        this.spaceMarineService = spaceMarineService;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getSpaceMarineById(@PathVariable("id") String idStr) {
         long id;
         try {
             id = Long.parseLong(idStr);
-            return Response.ok().entity(spaceMarineService.getSpaceMarineById(id)).build();
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(spaceMarineService.getSpaceMarineById(id));
         } catch (NumberFormatException e) {
             throw new InvalidParamException("Validation failed");
         }
     }
 
-    @GET
-    public Response getAllSpaceMarines(@Context HttpServletRequest request)
+    @GetMapping
+    public ResponseEntity<?> getAllSpaceMarines(@Context HttpServletRequest request)
     {
         String[] sortParameters = request.getParameterValues("sort");
         String[] filterParameters = request.getParameterValues("filter");
@@ -79,31 +81,29 @@ public class SpaceMarineController {
                 getFilterParameters(filter),
                 pageInt,
                 pageSizeInt);
-        return Response.ok().entity(spaceMarines).build();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(spaceMarines);
     }
 
-    @POST
-    public Response createSpaceMarine(SpaceMarineBuildDto spaceMarineBuildDto) {
+    @PostMapping
+    public ResponseEntity<?> createSpaceMarine(@RequestBody SpaceMarineBuildDto spaceMarineBuildDto) {
         SpaceMarineResponseDto spaceMarine = spaceMarineService.createSpaceMarine(spaceMarineBuildDto);
-        return Response.ok().entity(spaceMarine).build();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(spaceMarine);
     }
 
-    @PUT
-    @Path("/{id}")
-    public Response updateSpaceMarine(@PathParam("id") String idStr, SpaceMarineBuildDto spaceMarineBuildDto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateSpaceMarine(@PathVariable("id") String idStr, @RequestBody SpaceMarineBuildDto spaceMarineBuildDto) {
         long id;
         try {
             id = Long.parseLong(idStr);
             SpaceMarineResponseDto spaceMarine = spaceMarineService.updateSpaceMarine(id, spaceMarineBuildDto);
-            return Response.ok().entity(spaceMarine).build();
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(spaceMarine);
         } catch (NumberFormatException exception) {
             throw new InvalidParamException("Validation failed");
         }
     }
 
-    @DELETE
-    @Path("/{id}")
-    public Response deleteSpaceMarineById(@PathParam("id") String idStr) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteSpaceMarineById(@PathVariable("id") String idStr) {
         Map<String, Object> map = new HashMap<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
         long id;
@@ -113,7 +113,7 @@ public class SpaceMarineController {
             map.put("code", 200);
             map.put("message", "The marine was successfully deleted");
             map.put("time", ZonedDateTime.now(ZoneOffset.UTC).format(formatter));
-            return Response.ok().entity(map).build();
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(map);
         } catch (NumberFormatException exception) {
             throw new InvalidParamException("Invalid id value");
         }

@@ -1,21 +1,22 @@
 package com.example.mainservice.exceptions;
 
 import com.example.mainservice.model.Error;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import javax.ws.rs.core.Response;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ErrorBuildResponseUtils {
-    public static Response buildResponse(Response.Status status, String message) {
+    public static ResponseEntity<?> buildResponse(HttpStatus status, String message) {
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
         Error error = new Error(
-                status.getStatusCode(),
+                status.value(),
                 message,
                 now.format(formatter)
         );
-        return Response.status(status).entity(error).build();
+        return ResponseEntity.status(status).body(error);
     }
 }

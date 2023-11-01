@@ -1,21 +1,24 @@
 package com.example.mainservice.services.implementations;
 
 import com.example.mainservice.entity.SpaceMarine;
-import com.example.mainservice.model.response.ListSpaceMarine;
 import com.example.mainservice.model.response.SpaceMarineResponseDto;
 import com.example.mainservice.model.response.UniqueHeart;
 import com.example.mainservice.repositories.SpaceMarineRepository;
 import com.example.mainservice.services.interfaces.ExtraFunctionsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Stateless
+@Service
 public class ExtraFunctionsServiceImpl implements ExtraFunctionsService {
-    @Inject
-    private SpaceMarineRepository spaceMarineRepository;
+    private final SpaceMarineRepository spaceMarineRepository;
+
+    @Autowired
+    public ExtraFunctionsServiceImpl(SpaceMarineRepository spaceMarineRepository) {
+        this.spaceMarineRepository = spaceMarineRepository;
+    }
 
     @Override
     public UniqueHeart getUniqueHeartCount() {
@@ -30,7 +33,6 @@ public class ExtraFunctionsServiceImpl implements ExtraFunctionsService {
     @Override
     public List<SpaceMarineResponseDto> getByPattern(String field, String value) {
         List<SpaceMarine> byPattern = spaceMarineRepository.getByPattern(field, value);
-        List<SpaceMarineResponseDto> convertToDto = byPattern.stream().map(SpaceMarine::buildResponseDto).collect(Collectors.toList());
-        return convertToDto;
+        return byPattern.stream().map(SpaceMarine::buildResponseDto).collect(Collectors.toList());
     }
 }

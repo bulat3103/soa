@@ -6,14 +6,17 @@ import com.example.mainservice.model.request.StarShipCreateDto;
 import com.example.mainservice.repositories.StarShipRepository;
 import com.example.mainservice.services.interfaces.StarShipService;
 import com.example.mainservice.validators.StarShipCreateDtoValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-@Stateless
+@Service
 public class StarShipServiceImpl implements StarShipService {
-    @Inject
-    private StarShipRepository shipRepository;
+    private final StarShipRepository shipRepository;
+
+    @Autowired
+    public StarShipServiceImpl(StarShipRepository shipRepository) {
+        this.shipRepository = shipRepository;
+    }
 
     @Override
     public void createStarShip(StarShipCreateDto starShipCreateDto) {

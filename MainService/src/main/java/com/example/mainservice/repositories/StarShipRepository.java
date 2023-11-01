@@ -1,21 +1,22 @@
 package com.example.mainservice.repositories;
 
 import com.example.mainservice.entity.StarShip;
+import org.springframework.stereotype.Component;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-@Stateless
+@Component
 public class StarShipRepository {
-    @Inject
-    private ManagerProvider managerProvider;
+    @PersistenceContext
+    private EntityManager em;
 
     public StarShip getById(Long id) {
-        return managerProvider.getEm().find(StarShip.class, id);
+        return em.find(StarShip.class, id);
     }
 
     public void save(StarShip starShip) {
-        managerProvider.getEm().persist(starShip);
-        managerProvider.getEm().flush();
+        em.persist(starShip);
+        em.flush();
     }
 }
