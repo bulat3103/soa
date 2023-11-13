@@ -4,6 +4,7 @@ import com.example.mainservice.model.request.StarShipCreateDto;
 import com.example.mainservice.services.interfaces.StarShipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,11 @@ public class StarShipController {
     @PostMapping
     public ResponseEntity<?> createStarShip(StarShipCreateDto starShipCreateDto) {
         starShipService.createStarShip(starShipCreateDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/ping")
+    public ResponseEntity<?> ping() {
         return ResponseEntity.ok().build();
     }
 }
