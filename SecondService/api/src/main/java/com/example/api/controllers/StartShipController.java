@@ -4,6 +4,7 @@ import com.example.api.exceptions.InternalServerError;
 import com.example.api.exceptions.InvalidParamException;
 import com.example.api.exceptions.NotFoundException;
 import com.example.api.model.StarShipCreateDto;
+import com.example.api.utils.JndiUtils;
 import com.example.api.validators.StarShipCreateDtoValidator;
 import com.example.ejb.services.StarShipService;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +13,26 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("starship")
 public class StartShipController {
-    private final StarShipService starShipService;
 
-    public StartShipController(StarShipService starShipService) {
-        this.starShipService = starShipService;
+    private StarShipService getService() {
+        return JndiUtils.getFromContext(StarShipService.class,
+                "ejb:/ejb-1.0-SNAPSHOT-jar-with-dependencies/StarShipServiceImpl!com.example.ejb.services.StarShipService");
     }
 
     @CrossOrigin
     @GetMapping(value = "/hello")
     public String hello() {
         return "Hello, World!";
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/check")
+    public ResponseEntity<?> check() {
+        Integer status = getService().check();
+        if (status == 200) {
+            return ResponseEntity.ok().build();
+        }
+        throw new InternalServerError("Internal server error");
     }
 
     @CrossOrigin
@@ -33,7 +44,7 @@ public class StartShipController {
     {
         long id = Long.parseLong(idStr);
         StarShipCreateDtoValidator.validate(starShipCreateDto);
-        Integer status = starShipService.createNewStarShip(
+        Integer status = getService().createNewStarShip(
                 id,
                 name,
                 starShipCreateDto.getCoordinates().getX(),
@@ -54,7 +65,7 @@ public class StartShipController {
     @PostMapping(value = "/{id}/unload-all")
     public ResponseEntity<?> unloadAll(@PathVariable("id") String idStr) {
         long id = Long.parseLong(idStr);
-        Integer status = starShipService.unloadAll(id);
+        Integer status = getService().unloadAll(id);
         if (status == 400) {
             throw new InvalidParamException("Validation failed");
         } else if (status == 404) {

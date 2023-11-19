@@ -19,8 +19,12 @@ import java.util.List;
 @Pool(value = "starshipServicePool")
 public class StarShipServiceImpl implements StarShipService {
 
-    private static final String MAIN_SERVICE_SPACEMARINES_URL = "https://localhost:7112/api/v1/spacemarines";
-    private static final String MAIN_SERVICE_STARSHIP_URL = "https://localhost:7112/api/v1/starship";
+    private static final String MAIN_SERVICE_SPACEMARINES_URL = "http://localhost:7112/api/v1/spacemarines";
+    private static final String MAIN_SERVICE_STARSHIP_URL = "http://localhost:7112/api/v1/starship";
+
+    public Integer check() {
+        return 200;
+    }
 
     public Integer unloadAll(Long id) {
         Response getResponse = performGetSpaceMarines(id);

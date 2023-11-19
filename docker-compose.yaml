@@ -9,3 +9,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=soa
     restart: unless-stopped
+  starship-service-1:
+    image: bulat/second
+    container_name: starship-service-1
+    ports:
+      - 8081:8081
