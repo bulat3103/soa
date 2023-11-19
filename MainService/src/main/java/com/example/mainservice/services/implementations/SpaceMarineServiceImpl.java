@@ -12,18 +12,22 @@ import com.example.mainservice.repositories.StarShipRepository;
 import com.example.mainservice.services.interfaces.SpaceMarineService;
 import com.example.mainservice.utils.BuildEntityFromDtos;
 import com.example.mainservice.validators.SpaceMarineBuildDtoValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Stateless
+@Service
 public class SpaceMarineServiceImpl implements SpaceMarineService {
-    @Inject
-    private SpaceMarineRepository spaceMarineRepository;
-    @Inject
-    private StarShipRepository shipRepository;
+    private final SpaceMarineRepository spaceMarineRepository;
+    private final StarShipRepository shipRepository;
+
+    @Autowired
+    public SpaceMarineServiceImpl(SpaceMarineRepository spaceMarineRepository, StarShipRepository shipRepository) {
+        this.spaceMarineRepository = spaceMarineRepository;
+        this.shipRepository = shipRepository;
+    }
 
     @Override
     public SpaceMarineResponseDto createSpaceMarine(SpaceMarineBuildDto spaceMarineBuildDto) {

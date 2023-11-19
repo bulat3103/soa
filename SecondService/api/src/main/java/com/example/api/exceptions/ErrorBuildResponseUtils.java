@@ -1,6 +1,6 @@
-package com.example.mainservice.exceptions;
+package com.example.api.exceptions;
 
-import com.example.mainservice.model.Error;
+import com.example.api.model.Error;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

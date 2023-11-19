@@ -1,34 +1,34 @@
 package com.example.mainservice.repositories;
 
 import com.example.mainservice.entity.*;
-import com.example.mainservice.model.AstartesCategory;
 import com.example.mainservice.model.Filter;
 import com.example.mainservice.model.Sort;
+import org.springframework.stereotype.Component;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Stateless
+@Component
 public class SpaceMarineRepository {
-    @Inject
-    private ManagerProvider managerProvider;
+    @PersistenceContext
+    private EntityManager em;
 
     public SpaceMarine save(SpaceMarine spaceMarine) {
-        managerProvider.getEm().persist(spaceMarine);
-        managerProvider.getEm().flush();
+        em.persist(spaceMarine);
+        em.flush();
         return spaceMarine;
     }
 
     public SpaceMarine getById(Long id) {
-        return managerProvider.getEm().find(SpaceMarine.class, id);
+        return em.find(SpaceMarine.class, id);
     }
 
     public List<SpaceMarine> getAllSpaceMarines(List<Sort> sorts, List<Filter> filters, Integer page, Integer limit) {
-        CriteriaBuilder criteriaBuilder = managerProvider.getEm().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<SpaceMarine> criteriaQuery = criteriaBuilder.createQuery(SpaceMarine.class);
         Root<SpaceMarine> from = criteriaQuery.from(SpaceMarine.class);
         CriteriaQuery<SpaceMarine> select = criteriaQuery.select(from);
@@ -138,49 +138,49 @@ public class SpaceMarineRepository {
             }
             select.orderBy(order);
         }
-        return managerProvider.getEm().createQuery(select)
+        return em.createQuery(select)
                 .setFirstResult((page - 1) * limit)
                 .setMaxResults(limit)
                 .getResultList();
     }
 
     public void deleteById(Long id) {
-        CriteriaBuilder criteriaBuilder = managerProvider.getEm().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaDelete<SpaceMarine> criteriaDelete = criteriaBuilder.createCriteriaDelete(SpaceMarine.class);
         Root<SpaceMarine> from = criteriaDelete.from(SpaceMarine.class);
         criteriaDelete.where(criteriaBuilder.equal(from.get("id"), id));
-        managerProvider.getEm().createQuery(criteriaDelete).executeUpdate();
+        em.createQuery(criteriaDelete).executeUpdate();
     }
 
     public List<Integer> getUniqueHeartCountColumn() {
-        CriteriaBuilder criteriaBuilder = managerProvider.getEm().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Integer> query = criteriaBuilder.createQuery(Integer.class);
         query.select(query.from(SpaceMarine.class).get("heartCount")).distinct(true);
-        TypedQuery<Integer> tq = managerProvider.getEm().createQuery(query);
+        TypedQuery<Integer> tq = em.createQuery(query);
         return tq.getResultList();
     }
 
     public Integer getLowerAchieves(String achieve) {
-        CriteriaBuilder criteriaBuilder = managerProvider.getEm().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<SpaceMarine> query = criteriaBuilder.createQuery(SpaceMarine.class);
         Root<SpaceMarine> from = query.from(SpaceMarine.class);
         query.select(from).where(criteriaBuilder.lessThan(from.get("achievements"), achieve));
-        return managerProvider.getEm().createQuery(query).getResultList().size();
+        return em.createQuery(query).getResultList().size();
     }
 
     public List<SpaceMarine> getByPattern(String field, String value) {
-        CriteriaBuilder criteriaBuilder = managerProvider.getEm().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<SpaceMarine> query = criteriaBuilder.createQuery(SpaceMarine.class);
         Root<SpaceMarine> from = query.from(SpaceMarine.class);
         query.select(from).where(criteriaBuilder.like(from.get(field), "%" + value + "%"));
-        return managerProvider.getEm().createQuery(query).getResultList();
+        return em.createQuery(query).getResultList();
     }
 
     public List<SpaceMarine> getByStarShipId(Long starShipId) {
-        CriteriaBuilder criteriaBuilder = managerProvider.getEm().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<SpaceMarine> query = criteriaBuilder.createQuery(SpaceMarine.class);
         Root<SpaceMarine> from = query.from(SpaceMarine.class);
         query.select(from).where(criteriaBuilder.equal(from.get("starShipId"), starShipId));
-        return managerProvider.getEm().createQuery(query).getResultList();
+        return em.createQuery(query).getResultList();
     }
 }
