@@ -1,0 +1,204 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://com/example/marineservice/catalog"
+           targetNamespace="http://com/example/marineservice/catalog"
+           elementFormDefault="qualified">
+    <xs:element name="getSpaceMarinesRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="sort" type="xs:string" maxOccurs="unbounded"/>
+                <xs:element name="filter" type="xs:string" maxOccurs="unbounded"/>
+                <xs:element name="page" type="xs:string"/>
+                <xs:element name="pageSize" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getSpaceMarinesResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="spaceMarineResponseDtos" maxOccurs="unbounded" type="tns:SpaceMarineResponseDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getSpaceMarineRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:string" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getSpaceMarineResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long" minOccurs="1"/>
+                <xs:element name="name" type="xs:string" />
+                <xs:element name="coordinates" type="tns:CoordinatesResponseDto"/>
+                <xs:element name="creationDate" type="xs:string"/>
+                <xs:element name="health" type="xs:double"/>
+                <xs:element name="heartCount" type="xs:int"/>
+                <xs:element name="achievements" type="xs:string"/>
+                <xs:element name="category" type="xs:string"/>
+                <xs:element name="chapter" type="tns:ChapterResponseDto"/>
+                <xs:element name="starship" type="tns:StarShipResponseDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="createSpaceMarineRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="coordinates" type="tns:CoordinatesRequestDto"/>
+                <xs:element name="health" type="xs:string"/>
+                <xs:element name="heartCount" type="xs:string"/>
+                <xs:element name="achievements" type="xs:string"/>
+                <xs:element name="category" type="xs:string"/>
+                <xs:element name="chapter" type="tns:ChapterRequestDto"/>
+                <xs:element name="starship" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="createStarShipRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:string"/>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="coordinates" type="tns:CoordinatesRequestDto"/>
+                <xs:element name="crewCount" type="xs:string"/>
+                <xs:element name="health" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updateSpaceMarineRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:string" minOccurs="1"/>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="coordinates" type="tns:CoordinatesRequestDto"/>
+                <xs:element name="health" type="xs:string"/>
+                <xs:element name="heartCount" type="xs:string"/>
+                <xs:element name="achievements" type="xs:string"/>
+                <xs:element name="category" type="xs:string"/>
+                <xs:element name="chapter" type="tns:ChapterRequestDto"/>
+                <xs:element name="starship" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="deleteSpaceMarineRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:string" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="simpleResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="code" type="xs:string" maxOccurs="1"/>
+                <xs:element name="message" type="xs:string" maxOccurs="1"/>
+                <xs:element name="time" type="xs:string" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getLowerAchievesRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="achieve" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getLowerAchievesResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="count" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getByPatternRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="field" type="xs:string"/>
+                <xs:element name="value" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getUniqueHeartRequest">
+        <xs:complexType>
+            <xs:sequence>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getUniqueHeartResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="hearts" maxOccurs="unbounded" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="CoordinatesRequestDto">
+        <xs:sequence>
+            <xs:element name="x" type="xs:string" minOccurs="0"/>
+            <xs:element name="y" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CoordinatesResponseDto">
+        <xs:sequence>
+            <xs:element name="x" type="xs:long" minOccurs="0"/>
+            <xs:element name="y" type="xs:double" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="ChapterRequestDto">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="marinesCount" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ChapterResponseDto">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="marinesCount" type="xs:int" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="StarShipResponseDto">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long" minOccurs="1"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="coordinates" type="tns:CoordinatesResponseDto"/>
+            <xs:element name="crewCount" type="xs:int" minOccurs="0"/>
+            <xs:element name="health" type="xs:int" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SpaceMarineResponseDto">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long" minOccurs="1"/>
+            <xs:element name="name" type="xs:string" />
+            <xs:element name="coordinates" type="tns:CoordinatesResponseDto"/>
+            <xs:element name="creationDate" type="xs:string"/>
+            <xs:element name="health" type="xs:double"/>
+            <xs:element name="heartCount" type="xs:int"/>
+            <xs:element name="achievements" type="xs:string"/>
+            <xs:element name="category" type="xs:string"/>
+            <xs:element name="chapter" type="tns:ChapterResponseDto"/>
+            <xs:element name="starship" type="tns:StarShipResponseDto"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

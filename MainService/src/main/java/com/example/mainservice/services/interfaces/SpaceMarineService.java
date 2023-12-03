@@ -1,16 +1,17 @@
 package com.example.mainservice.services.interfaces;
 
+import com.example.mainservice.catalog.CreateSpaceMarineRequest;
+import com.example.mainservice.catalog.SpaceMarineResponseDto;
+import com.example.mainservice.catalog.UpdateSpaceMarineRequest;
 import com.example.mainservice.model.Filter;
 import com.example.mainservice.model.Sort;
-import com.example.mainservice.model.request.SpaceMarineBuildDto;
-import com.example.mainservice.model.response.SpaceMarineResponseDto;
 
 import java.util.List;
 
 public interface SpaceMarineService {
-    SpaceMarineResponseDto createSpaceMarine(SpaceMarineBuildDto spaceMarineBuildDto);
+    SpaceMarineResponseDto createSpaceMarine(CreateSpaceMarineRequest createSpaceMarineRequest);
 
-    SpaceMarineResponseDto updateSpaceMarine(Long id, SpaceMarineBuildDto spaceMarineBuildDto);
+    SpaceMarineResponseDto updateSpaceMarine(Long id, UpdateSpaceMarineRequest updateSpaceMarineRequest);
 
     void deleteSpaceMarine(Long id);
 

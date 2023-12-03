@@ -1,8 +1,8 @@
 package com.example.mainservice.services.implementations;
 
+import com.example.mainservice.catalog.GetUniqueHeartResponse;
+import com.example.mainservice.catalog.SpaceMarineResponseDto;
 import com.example.mainservice.entity.SpaceMarine;
-import com.example.mainservice.model.response.SpaceMarineResponseDto;
-import com.example.mainservice.model.response.UniqueHeart;
 import com.example.mainservice.repositories.SpaceMarineRepository;
 import com.example.mainservice.services.interfaces.ExtraFunctionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,10 @@ public class ExtraFunctionsServiceImpl implements ExtraFunctionsService {
     }
 
     @Override
-    public UniqueHeart getUniqueHeartCount() {
-        return new UniqueHeart(spaceMarineRepository.getUniqueHeartCountColumn());
+    public GetUniqueHeartResponse getUniqueHeartCount() {
+        GetUniqueHeartResponse response = new GetUniqueHeartResponse();
+        response.getHearts().addAll(spaceMarineRepository.getUniqueHeartCountColumn());
+        return response;
     }
 
     @Override

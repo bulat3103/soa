@@ -1,8 +1,8 @@
 package com.example.mainservice.services.implementations;
 
+import com.example.mainservice.catalog.CreateStarShipRequest;
 import com.example.mainservice.entity.StarShip;
 import com.example.mainservice.exceptions.InvalidParamException;
-import com.example.mainservice.model.request.StarShipCreateDto;
 import com.example.mainservice.repositories.StarShipRepository;
 import com.example.mainservice.services.interfaces.StarShipService;
 import com.example.mainservice.validators.StarShipCreateDtoValidator;
@@ -19,17 +19,17 @@ public class StarShipServiceImpl implements StarShipService {
     }
 
     @Override
-    public void createStarShip(StarShipCreateDto starShipCreateDto) {
-        StarShipCreateDtoValidator.validate(starShipCreateDto);
-        StarShip inDb = shipRepository.getById(Long.parseLong(starShipCreateDto.getId()));
+    public void createStarShip(CreateStarShipRequest createStarShipRequest) {
+        StarShipCreateDtoValidator.validate(createStarShipRequest);
+        StarShip inDb = shipRepository.getById(Long.parseLong(createStarShipRequest.getId()));
         if (inDb != null) throw new InvalidParamException("Validation failed");
         StarShip starShip = new StarShip();
-        starShip.setId(Long.parseLong(starShipCreateDto.getId()));
-        starShip.setName(starShipCreateDto.getName());
-        starShip.setCoordinateX(Long.parseLong(starShipCreateDto.getCoordinates().getX()));
-        starShip.setCoordinateY(Double.parseDouble(starShipCreateDto.getCoordinates().getY()));
-        starShip.setCrewCount(Integer.parseInt(starShipCreateDto.getCrewCount()));
-        starShip.setHealth(Integer.parseInt(starShipCreateDto.getHealth()));
+        starShip.setId(Long.parseLong(createStarShipRequest.getId()));
+        starShip.setName(createStarShipRequest.getName());
+        starShip.setCoordinateX(Long.parseLong(createStarShipRequest.getCoordinates().getX()));
+        starShip.setCoordinateY(Double.parseDouble(createStarShipRequest.getCoordinates().getY()));
+        starShip.setCrewCount(Integer.parseInt(createStarShipRequest.getCrewCount()));
+        starShip.setHealth(Integer.parseInt(createStarShipRequest.getHealth()));
         shipRepository.save(starShip);
     }
 }

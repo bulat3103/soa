@@ -1,12 +1,12 @@
 package com.example.mainservice.validators;
 
+import com.example.mainservice.catalog.CreateSpaceMarineRequest;
 import com.example.mainservice.exceptions.InvalidParamException;
 import com.example.mainservice.model.AstartesCategory;
-import com.example.mainservice.model.request.SpaceMarineBuildDto;
 
 public class SpaceMarineBuildDtoValidator {
 
-    public static void validate(SpaceMarineBuildDto dto) {
+    public static void validate(CreateSpaceMarineRequest dto) {
         if (dto.getName() == null || dto.getName().isEmpty() || dto.getName().length() > 255) throw new InvalidParamException("Validation failed");
         if (dto.getAchievements() != null && dto.getAchievements().length() > 255) throw new InvalidParamException("Validation failed");
         if (dto.getCategory() == null) throw new InvalidParamException("Validation failed");
@@ -57,9 +57,9 @@ public class SpaceMarineBuildDtoValidator {
                 throw new InvalidParamException("Validation failed");
             }
         }
-        if (dto.getStarshipId() != null) {
+        if (dto.getStarship() != null) {
             try {
-                Long.parseLong(dto.getStarshipId());
+                Long.parseLong(dto.getStarship());
             } catch (NumberFormatException e) {
                 throw new InvalidParamException("Validation failed");
             }

@@ -1,28 +1,27 @@
 package com.example.mainservice.utils;
 
+import com.example.mainservice.catalog.CreateSpaceMarineRequest;
 import com.example.mainservice.entity.SpaceMarine;
-import com.example.mainservice.model.AstartesCategory;
-import com.example.mainservice.model.request.SpaceMarineBuildDto;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 public class BuildEntityFromDtos {
 
-    public static void buildCommonSpaceMarineFields(SpaceMarine spaceMarine, SpaceMarineBuildDto spaceMarineBuildDto) {
-        spaceMarine.setName(spaceMarineBuildDto.getName());
-        spaceMarine.setCoordinateX(Long.parseLong(spaceMarineBuildDto.getCoordinates().getX()));
-        spaceMarine.setCoordinateY(Double.parseDouble(spaceMarineBuildDto.getCoordinates().getY()));
-        spaceMarine.setHealth(Double.parseDouble(spaceMarineBuildDto.getHealth()));
-        spaceMarine.setHeartCount(Integer.parseInt(spaceMarineBuildDto.getHeartCount()));
-        spaceMarine.setAchievements(spaceMarineBuildDto.getAchievements());
-        spaceMarine.setCategory(spaceMarineBuildDto.getCategory().toUpperCase());
-        spaceMarine.setChapterName(spaceMarineBuildDto.getChapter().getName());
-        spaceMarine.setChapterMarinesCount(Integer.parseInt(spaceMarineBuildDto.getChapter().getMarinesCount()));
+    public static void buildCommonSpaceMarineFields(SpaceMarine spaceMarine, CreateSpaceMarineRequest createSpaceMarineRequest) {
+        spaceMarine.setName(createSpaceMarineRequest.getName());
+        spaceMarine.setCoordinateX(Long.parseLong(createSpaceMarineRequest.getCoordinates().getX()));
+        spaceMarine.setCoordinateY(Double.parseDouble(createSpaceMarineRequest.getCoordinates().getY()));
+        spaceMarine.setHealth(Double.parseDouble(createSpaceMarineRequest.getHealth()));
+        spaceMarine.setHeartCount(Integer.parseInt(createSpaceMarineRequest.getHeartCount()));
+        spaceMarine.setAchievements(createSpaceMarineRequest.getAchievements());
+        spaceMarine.setCategory(createSpaceMarineRequest.getCategory().toUpperCase());
+        spaceMarine.setChapterName(createSpaceMarineRequest.getChapter().getName());
+        spaceMarine.setChapterMarinesCount(Integer.parseInt(createSpaceMarineRequest.getChapter().getMarinesCount()));
     }
-    public static SpaceMarine buildSpaceMarine(SpaceMarineBuildDto spaceMarineBuildDto) {
+    public static SpaceMarine buildSpaceMarine(CreateSpaceMarineRequest createSpaceMarineRequest) {
         SpaceMarine spaceMarine = new SpaceMarine();
-        buildCommonSpaceMarineFields(spaceMarine, spaceMarineBuildDto);
+        buildCommonSpaceMarineFields(spaceMarine, createSpaceMarineRequest);
         spaceMarine.setCreationDate(ZonedDateTime.now(ZoneOffset.UTC));
         return spaceMarine;
     }

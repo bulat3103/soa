@@ -1,37 +1,33 @@
 package com.example.mainservice.controllers;
 
+import com.example.mainservice.catalog.*;
 import com.example.mainservice.entity.AvailableFields;
 import com.example.mainservice.entity.FilterOperation;
 import com.example.mainservice.entity.SortOperation;
-import com.example.mainservice.exceptions.InvalidParamException;
+import com.example.mainservice.exceptions.*;
 import com.example.mainservice.model.Filter;
 import com.example.mainservice.model.Sort;
-import com.example.mainservice.model.request.SpaceMarineBuildDto;
-import com.example.mainservice.model.response.SpaceMarineResponseDto;
 import com.example.mainservice.services.interfaces.SpaceMarineService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.ws.server.endpoint.annotation.Endpoint;
+import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
+import org.springframework.ws.server.endpoint.annotation.RequestPayload;
+import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@RestController
-@RequestMapping("/spacemarines")
+@Endpoint
 public class SpaceMarineController {
+    private static final String NAMESPACE_URI = "http://com/example/marineservice/catalog";
     private final SpaceMarineService spaceMarineService;
 
     @Autowired
@@ -39,36 +35,51 @@ public class SpaceMarineController {
         this.spaceMarineService = spaceMarineService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getSpaceMarineById(@PathVariable("id") String idStr) {
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getSpaceMarineRequest")
+    @ResponsePayload
+    public GetSpaceMarineResponse getSpaceMarineById(@RequestPayload GetSpaceMarineRequest request) {
         long id;
         try {
-            id = Long.parseLong(idStr);
-            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(spaceMarineService.getSpaceMarineById(id));
+            id = Long.parseLong(request.getId());
+            SpaceMarineResponseDto spaceMarineById = spaceMarineService.getSpaceMarineById(id);
+            GetSpaceMarineResponse response = new GetSpaceMarineResponse();
+            response.setId(spaceMarineById.getId());
+            response.setName(spaceMarineById.getName());
+            response.setCreationDate(spaceMarineById.getCreationDate());
+            response.setCoordinates(spaceMarineById.getCoordinates());
+            response.setHealth(spaceMarineById.getHealth());
+            response.setHeartCount(spaceMarineById.getHeartCount());
+            response.setAchievements(spaceMarineById.getAchievements());
+            response.setCategory(spaceMarineById.getCategory());
+            response.setChapter(spaceMarineById.getChapter());
+            response.setStarship(spaceMarineById.getStarship());
+            return response;
         } catch (NumberFormatException e) {
-            throw new InvalidParamException("Validation failed");
+            throw new ServiceFaultException("Error", new ServiceFault("400", "Validation failed", ErrorBuildResponseUtils.getTime()));
+        } catch (NotFoundException e) {
+            throw new ServiceFaultException("Error", new ServiceFault("404", "Not found", ErrorBuildResponseUtils.getTime()));
         }
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllSpaceMarines(@Context HttpServletRequest request)
-    {
-        String[] sortParameters = request.getParameterValues("sort");
-        String[] filterParameters = request.getParameterValues("filter");
-        String page = request.getParameter("page");
-        String pageSize = request.getParameter("pageSize");
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getSpaceMarinesRequest")
+    @ResponsePayload
+    public GetSpaceMarinesResponse getAllSpaceMarines(@RequestPayload GetSpaceMarinesRequest request) {
+        String[] sortParameters = request.getSort().toArray(String[]::new);
+        String[] filterParameters = request.getFilter().toArray(String[]::new);
+        String page = request.getPage();
+        String pageSize = request.getPageSize();
         int pageInt, pageSizeInt;
         try {
             pageInt = StringUtils.isEmpty(page) ? 1 : Integer.parseInt(page);
             if (pageInt <= 0) throw new NumberFormatException();
         } catch (NumberFormatException exception) {
-            throw new InvalidParamException("Validation failed");
+            throw new ServiceFaultException("Error", new ServiceFault("400", "Validation failed", ErrorBuildResponseUtils.getTime()));
         }
         try {
             pageSizeInt = StringUtils.isEmpty(pageSize) ? 20 : Integer.parseInt(pageSize);
             if (pageSizeInt <= 0) throw new NumberFormatException();
         } catch (NumberFormatException exception) {
-            throw new InvalidParamException("Validation failed");
+            throw new ServiceFaultException("Error", new ServiceFault("400", "Validation failed", ErrorBuildResponseUtils.getTime()));
         }
         List<String> sort;
         if (sortParameters == null) sort = new ArrayList<>();
@@ -81,41 +92,78 @@ public class SpaceMarineController {
                 getFilterParameters(filter),
                 pageInt,
                 pageSizeInt);
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(spaceMarines);
+        GetSpaceMarinesResponse response = new GetSpaceMarinesResponse();
+        response.getSpaceMarineResponseDtos().addAll(spaceMarines);
+        return response;
     }
 
-    @PostMapping
-    public ResponseEntity<?> createSpaceMarine(@RequestBody SpaceMarineBuildDto spaceMarineBuildDto) {
-        SpaceMarineResponseDto spaceMarine = spaceMarineService.createSpaceMarine(spaceMarineBuildDto);
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(spaceMarine);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateSpaceMarine(@PathVariable("id") String idStr, @RequestBody SpaceMarineBuildDto spaceMarineBuildDto) {
-        long id;
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createSpaceMarineRequest")
+    @ResponsePayload
+    public GetSpaceMarineResponse createSpaceMarine(@RequestPayload CreateSpaceMarineRequest request) {
         try {
-            id = Long.parseLong(idStr);
-            SpaceMarineResponseDto spaceMarine = spaceMarineService.updateSpaceMarine(id, spaceMarineBuildDto);
-            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(spaceMarine);
-        } catch (NumberFormatException exception) {
-            throw new InvalidParamException("Validation failed");
+            SpaceMarineResponseDto spaceMarine = spaceMarineService.createSpaceMarine(request);
+            GetSpaceMarineResponse response = new GetSpaceMarineResponse();
+            response.setId(spaceMarine.getId());
+            response.setName(spaceMarine.getName());
+            response.setCreationDate(spaceMarine.getCreationDate());
+            response.setCoordinates(spaceMarine.getCoordinates());
+            response.setHealth(spaceMarine.getHealth());
+            response.setHeartCount(spaceMarine.getHeartCount());
+            response.setAchievements(spaceMarine.getAchievements());
+            response.setCategory(spaceMarine.getCategory());
+            response.setChapter(spaceMarine.getChapter());
+            response.setStarship(spaceMarine.getStarship());
+            return response;
+        } catch (InvalidParamException e) {
+            throw new ServiceFaultException("Error", new ServiceFault("400", "Validation failed", ErrorBuildResponseUtils.getTime()));
+        } catch (NotFoundException e) {
+            throw new ServiceFaultException("Error", new ServiceFault("404", "Not found", ErrorBuildResponseUtils.getTime()));
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteSpaceMarineById(@PathVariable("id") String idStr) {
-        Map<String, Object> map = new HashMap<>();
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateSpaceMarineRequest")
+    @ResponsePayload
+    public GetSpaceMarineResponse updateSpaceMarine(@RequestPayload UpdateSpaceMarineRequest request) {
+        long id;
+        try {
+            id = Long.parseLong(request.getId());
+            SpaceMarineResponseDto spaceMarine = spaceMarineService.updateSpaceMarine(id, request);
+            GetSpaceMarineResponse response = new GetSpaceMarineResponse();
+            response.setId(spaceMarine.getId());
+            response.setName(spaceMarine.getName());
+            response.setCreationDate(spaceMarine.getCreationDate());
+            response.setCoordinates(spaceMarine.getCoordinates());
+            response.setHealth(spaceMarine.getHealth());
+            response.setHeartCount(spaceMarine.getHeartCount());
+            response.setAchievements(spaceMarine.getAchievements());
+            response.setCategory(spaceMarine.getCategory());
+            response.setChapter(spaceMarine.getChapter());
+            response.setStarship(spaceMarine.getStarship());
+            return response;
+        } catch (NumberFormatException | InvalidParamException e) {
+            throw new ServiceFaultException("Error", new ServiceFault("400", "Validation failed", ErrorBuildResponseUtils.getTime()));
+        } catch (NotFoundException e) {
+            throw new ServiceFaultException("Error", new ServiceFault("404", "Not found", ErrorBuildResponseUtils.getTime()));
+        }
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteSpaceMarineRequest")
+    @ResponsePayload
+    public SimpleResponse deleteSpaceMarineById(@RequestPayload DeleteSpaceMarineRequest request) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
         long id;
         try {
-            id = Long.parseLong(idStr);
+            id = Long.parseLong(request.getId());
             spaceMarineService.deleteSpaceMarine(id);
-            map.put("code", 200);
-            map.put("message", "The marine was successfully deleted");
-            map.put("time", ZonedDateTime.now(ZoneOffset.UTC).format(formatter));
-            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(map);
+            SimpleResponse response = new SimpleResponse();
+            response.setCode("200");
+            response.setMessage("The marine was successfully deleted");
+            response.setTime(ZonedDateTime.now(ZoneOffset.UTC).format(formatter));
+            return response;
         } catch (NumberFormatException exception) {
-            throw new InvalidParamException("Invalid id value");
+            throw new ServiceFaultException("Error", new ServiceFault("400", "Validation failed", ErrorBuildResponseUtils.getTime()));
+        } catch (NotFoundException e) {
+            throw new ServiceFaultException("Error", new ServiceFault("404", "Not found", ErrorBuildResponseUtils.getTime()));
         }
     }
 

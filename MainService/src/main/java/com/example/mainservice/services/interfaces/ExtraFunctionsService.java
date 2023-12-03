@@ -1,13 +1,12 @@
 package com.example.mainservice.services.interfaces;
 
-import com.example.mainservice.model.response.ListSpaceMarine;
-import com.example.mainservice.model.response.SpaceMarineResponseDto;
-import com.example.mainservice.model.response.UniqueHeart;
+import com.example.mainservice.catalog.GetUniqueHeartResponse;
+import com.example.mainservice.catalog.SpaceMarineResponseDto;
 
 import java.util.List;
 
 public interface ExtraFunctionsService {
-    UniqueHeart getUniqueHeartCount();
+    GetUniqueHeartResponse getUniqueHeartCount();
 
     Integer getLowerAchieves(String achieve);
 

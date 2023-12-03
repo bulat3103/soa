@@ -1,17 +1,21 @@
 package com.example.mainservice.controllers;
 
-import com.example.mainservice.model.request.StarShipCreateDto;
+import com.example.mainservice.catalog.CreateStarShipRequest;
+import com.example.mainservice.catalog.SimpleResponse;
 import com.example.mainservice.services.interfaces.StarShipService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ws.server.endpoint.annotation.Endpoint;
+import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
+import org.springframework.ws.server.endpoint.annotation.RequestPayload;
+import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-@RestController
-@RequestMapping("/starship")
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+@Endpoint
 public class StarShipController {
+    private static final String NAMESPACE_URI = "http://com/example/marineservice/catalog";
     private final StarShipService starShipService;
 
     @Autowired
@@ -19,14 +23,15 @@ public class StarShipController {
         this.starShipService = starShipService;
     }
 
-    @PostMapping
-    public ResponseEntity<?> createStarShip(StarShipCreateDto starShipCreateDto) {
-        starShipService.createStarShip(starShipCreateDto);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/ping")
-    public ResponseEntity<?> ping() {
-        return ResponseEntity.ok().build();
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createStarShipRequest")
+    @ResponsePayload
+    public SimpleResponse createStarShip(@RequestPayload CreateStarShipRequest request) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        starShipService.createStarShip(request);
+        SimpleResponse response = new SimpleResponse();
+        response.setCode("200");
+        response.setMessage("Starship created successfully");
+        response.setTime(ZonedDateTime.now(ZoneOffset.UTC).format(formatter));
+        return response;
     }
 }

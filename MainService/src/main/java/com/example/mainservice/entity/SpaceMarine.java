@@ -1,10 +1,10 @@
 package com.example.mainservice.entity;
 
-import com.example.mainservice.model.AstartesCategory;
-import com.example.mainservice.model.response.ChapterResponseDto;
-import com.example.mainservice.model.response.CoordinatesResponseDto;
-import com.example.mainservice.model.response.SpaceMarineResponseDto;
-import com.example.mainservice.model.response.StarShipResponseDto;
+
+import com.example.mainservice.catalog.ChapterResponseDto;
+import com.example.mainservice.catalog.CoordinatesResponseDto;
+import com.example.mainservice.catalog.SpaceMarineResponseDto;
+import com.example.mainservice.catalog.StarShipResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -56,34 +56,38 @@ public class SpaceMarine {
     private StarShip starship;
 
     public static SpaceMarineResponseDto buildResponseDto(SpaceMarine spaceMarine) {
+        SpaceMarineResponseDto spaceMarineDto = new SpaceMarineResponseDto();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        return new SpaceMarineResponseDto(
-                spaceMarine.getId(),
-                spaceMarine.getName(),
-                new CoordinatesResponseDto(
-                        spaceMarine.getCoordinateX(),
-                        spaceMarine.getCoordinateY()
-                ),
-                spaceMarine.getCreationDate().format(formatter),
-                spaceMarine.getHealth(),
-                spaceMarine.getHeartCount(),
-                spaceMarine.getAchievements(),
-                AstartesCategory.valueOf(spaceMarine.getCategory()),
-                new ChapterResponseDto(
-                        spaceMarine.getChapterName(),
-                        spaceMarine.getChapterMarinesCount()
-                ),
-                spaceMarine.getStarship() == null ? null :
-                        new StarShipResponseDto(
-                                spaceMarine.getStarship().getId(),
-                                spaceMarine.getStarship().getName(),
-                                new CoordinatesResponseDto(
-                                        spaceMarine.getStarship().getCoordinateX(),
-                                        spaceMarine.getStarship().getCoordinateY()
-                                ),
-                                spaceMarine.getStarship().getCrewCount(),
-                                spaceMarine.getStarship().getHealth()
-                        )
-        );
+        ChapterResponseDto chapter = new ChapterResponseDto();
+        chapter.setName(spaceMarine.getChapterName());
+        chapter.setMarinesCount(spaceMarine.getChapterMarinesCount());
+
+        CoordinatesResponseDto coordinatesSpaceMarine = new CoordinatesResponseDto();
+        coordinatesSpaceMarine.setX(spaceMarine.getCoordinateX());
+        coordinatesSpaceMarine.setY(spaceMarine.getCoordinateY());
+
+        CoordinatesResponseDto coordinatesStarShip = new CoordinatesResponseDto();
+        coordinatesSpaceMarine.setX(spaceMarine.getStarship().getCoordinateX());
+        coordinatesSpaceMarine.setY(spaceMarine.getStarship().getCoordinateY());
+
+        if (spaceMarine.getStarship() != null) {
+            StarShipResponseDto starShip = new StarShipResponseDto();
+            starShip.setId(spaceMarine.getStarship().getId());
+            starShip.setName(spaceMarine.getStarship().getName());
+            starShip.setCoordinates(coordinatesStarShip);
+            starShip.setHealth(spaceMarine.getStarship().getHealth());
+            starShip.setCrewCount(spaceMarine.getStarship().getHealth());
+            spaceMarineDto.setStarship(starShip);
+        }
+        spaceMarineDto.setId(spaceMarine.getId());
+        spaceMarineDto.setName(spaceMarine.getName());
+        spaceMarineDto.setCoordinates(coordinatesSpaceMarine);
+        spaceMarineDto.setCreationDate(spaceMarine.getCreationDate().format(formatter));
+        spaceMarineDto.setHealth(spaceMarine.getHealth());
+        spaceMarineDto.setHeartCount(spaceMarine.getHeartCount());
+        spaceMarineDto.setAchievements(spaceMarine.getAchievements());
+        spaceMarineDto.setCategory(spaceMarine.getCategory());
+        spaceMarineDto.setChapter(chapter);
+        return spaceMarineDto;
     }
 }

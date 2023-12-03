@@ -1,11 +1,11 @@
 package com.example.mainservice.validators;
 
+import com.example.mainservice.catalog.CreateStarShipRequest;
 import com.example.mainservice.exceptions.InvalidParamException;
-import com.example.mainservice.model.request.StarShipCreateDto;
 
 public class StarShipCreateDtoValidator {
 
-    public static void validate(StarShipCreateDto dto) {
+    public static void validate(CreateStarShipRequest dto) {
         if (dto.getId() == null) throw new InvalidParamException("Validation failed");
         try {
             long l = Long.parseLong(dto.getId());

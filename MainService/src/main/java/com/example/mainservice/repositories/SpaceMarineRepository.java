@@ -4,6 +4,7 @@ import com.example.mainservice.entity.*;
 import com.example.mainservice.model.Filter;
 import com.example.mainservice.model.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,10 +18,9 @@ public class SpaceMarineRepository {
     @PersistenceContext
     private EntityManager em;
 
+    @Transactional
     public SpaceMarine save(SpaceMarine spaceMarine) {
-        em.persist(spaceMarine);
-        em.flush();
-        return spaceMarine;
+        return em.merge(spaceMarine);
     }
 
     public SpaceMarine getById(Long id) {
@@ -144,6 +144,7 @@ public class SpaceMarineRepository {
                 .getResultList();
     }
 
+    @Transactional
     public void deleteById(Long id) {
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaDelete<SpaceMarine> criteriaDelete = criteriaBuilder.createCriteriaDelete(SpaceMarine.class);
