@@ -1,6 +1,6 @@
 package com.example.mainservice.utils;
 
-import com.example.mainservice.catalog.CreateSpaceMarineRequest;
+/*import com.example.mainservice.catalog.CreateSpaceMarineRequest;
 import com.example.mainservice.entity.SpaceMarine;
 
 import java.time.ZoneOffset;
@@ -25,4 +25,4 @@ public class BuildEntityFromDtos {
         spaceMarine.setCreationDate(ZonedDateTime.now(ZoneOffset.UTC));
         return spaceMarine;
     }
-}
+}*/

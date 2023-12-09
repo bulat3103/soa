@@ -99,10 +99,10 @@ public class SpaceMarineController {
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createSpaceMarineRequest")
     @ResponsePayload
-    public GetSpaceMarineResponse createSpaceMarine(@RequestPayload CreateSpaceMarineRequest request) {
+    public CreateSpaceMarineResponse createSpaceMarine(@RequestPayload CreateSpaceMarineRequest request) {
         try {
             SpaceMarineResponseDto spaceMarine = spaceMarineService.createSpaceMarine(request);
-            GetSpaceMarineResponse response = new GetSpaceMarineResponse();
+            CreateSpaceMarineResponse response = new CreateSpaceMarineResponse();
             response.setId(spaceMarine.getId());
             response.setName(spaceMarine.getName());
             response.setCreationDate(spaceMarine.getCreationDate());
@@ -123,12 +123,12 @@ public class SpaceMarineController {
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateSpaceMarineRequest")
     @ResponsePayload
-    public GetSpaceMarineResponse updateSpaceMarine(@RequestPayload UpdateSpaceMarineRequest request) {
+    public UpdateSpaceMarineResponse updateSpaceMarine(@RequestPayload UpdateSpaceMarineRequest request) {
         long id;
         try {
             id = Long.parseLong(request.getId());
             SpaceMarineResponseDto spaceMarine = spaceMarineService.updateSpaceMarine(id, request);
-            GetSpaceMarineResponse response = new GetSpaceMarineResponse();
+            UpdateSpaceMarineResponse response = new UpdateSpaceMarineResponse();
             response.setId(spaceMarine.getId());
             response.setName(spaceMarine.getName());
             response.setCreationDate(spaceMarine.getCreationDate());
@@ -149,13 +149,13 @@ public class SpaceMarineController {
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteSpaceMarineRequest")
     @ResponsePayload
-    public SimpleResponse deleteSpaceMarineById(@RequestPayload DeleteSpaceMarineRequest request) {
+    public DeleteSpaceMarineResponse deleteSpaceMarineById(@RequestPayload DeleteSpaceMarineRequest request) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
         long id;
         try {
             id = Long.parseLong(request.getId());
             spaceMarineService.deleteSpaceMarine(id);
-            SimpleResponse response = new SimpleResponse();
+            DeleteSpaceMarineResponse response = new DeleteSpaceMarineResponse();
             response.setCode("200");
             response.setMessage("The marine was successfully deleted");
             response.setTime(ZonedDateTime.now(ZoneOffset.UTC).format(formatter));

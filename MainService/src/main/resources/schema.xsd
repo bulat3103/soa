@@ -56,7 +56,7 @@
                 <xs:element name="achievements" type="xs:string"/>
                 <xs:element name="category" type="xs:string"/>
                 <xs:element name="chapter" type="tns:ChapterRequestDto"/>
-                <xs:element name="starship" type="xs:string"/>
+                <xs:element name="starshipId" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -84,11 +84,44 @@
                 <xs:element name="achievements" type="xs:string"/>
                 <xs:element name="category" type="xs:string"/>
                 <xs:element name="chapter" type="tns:ChapterRequestDto"/>
-                <xs:element name="starship" type="xs:string"/>
+                <xs:element name="starshipId" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="createSpaceMarineResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long" minOccurs="1"/>
+                <xs:element name="name" type="xs:string" />
+                <xs:element name="coordinates" type="tns:CoordinatesResponseDto"/>
+                <xs:element name="creationDate" type="xs:string"/>
+                <xs:element name="health" type="xs:double"/>
+                <xs:element name="heartCount" type="xs:int"/>
+                <xs:element name="achievements" type="xs:string"/>
+                <xs:element name="category" type="xs:string"/>
+                <xs:element name="chapter" type="tns:ChapterResponseDto"/>
+                <xs:element name="starship" type="tns:StarShipResponseDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updateSpaceMarineResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long" minOccurs="1"/>
+                <xs:element name="name" type="xs:string" />
+                <xs:element name="coordinates" type="tns:CoordinatesResponseDto"/>
+                <xs:element name="creationDate" type="xs:string"/>
+                <xs:element name="health" type="xs:double"/>
+                <xs:element name="heartCount" type="xs:int"/>
+                <xs:element name="achievements" type="xs:string"/>
+                <xs:element name="category" type="xs:string"/>
+                <xs:element name="chapter" type="tns:ChapterResponseDto"/>
+                <xs:element name="starship" type="tns:StarShipResponseDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
     <xs:element name="deleteSpaceMarineRequest">
         <xs:complexType>
@@ -98,7 +131,17 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="simpleResponse">
+    <xs:element name="createStarShipResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="code" type="xs:string" maxOccurs="1"/>
+                <xs:element name="message" type="xs:string" maxOccurs="1"/>
+                <xs:element name="time" type="xs:string" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deleteSpaceMarineResponse">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="code" type="xs:string" maxOccurs="1"/>
@@ -129,6 +172,14 @@
             <xs:sequence>
                 <xs:element name="field" type="xs:string"/>
                 <xs:element name="value" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getByPatternResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="spaceMarineResponseDtos" maxOccurs="unbounded" type="tns:SpaceMarineResponseDto"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

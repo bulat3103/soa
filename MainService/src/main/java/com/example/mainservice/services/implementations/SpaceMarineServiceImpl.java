@@ -34,11 +34,11 @@ public class SpaceMarineServiceImpl implements SpaceMarineService {
     public SpaceMarineResponseDto createSpaceMarine(CreateSpaceMarineRequest createSpaceMarineRequest) {
         SpaceMarineBuildDtoValidator.validate(createSpaceMarineRequest);
         SpaceMarine spaceMarine = BuildEntityFromDtos.buildSpaceMarine(createSpaceMarineRequest);
-        if (createSpaceMarineRequest.getStarship() == null) {
+        if (createSpaceMarineRequest.getStarshipId() == null) {
             spaceMarine.setStarship(null);
             return SpaceMarine.buildResponseDto(spaceMarineRepository.save(spaceMarine));
         }
-        StarShip starShip = shipRepository.getById(Long.parseLong(createSpaceMarineRequest.getStarship()));
+        StarShip starShip = shipRepository.getById(Long.parseLong(createSpaceMarineRequest.getStarshipId()));
         if (starShip == null) throw new NotFoundException("Not found");
         spaceMarine.setStarship(starShip);
         return SpaceMarine.buildResponseDto(spaceMarineRepository.save(spaceMarine));
@@ -51,11 +51,11 @@ public class SpaceMarineServiceImpl implements SpaceMarineService {
         SpaceMarine spaceMarine = spaceMarineRepository.getById(id);
         if (spaceMarine == null) throw new NotFoundException("Not found");
         BuildEntityFromDtos.buildCommonSpaceMarineFields(spaceMarine, createSpaceMarineRequest);
-        if (createSpaceMarineRequest.getStarship() == null) {
+        if (createSpaceMarineRequest.getStarshipId() == null) {
             spaceMarine.setStarship(null);
             return SpaceMarine.buildResponseDto(spaceMarineRepository.save(spaceMarine));
         }
-        StarShip starShip = shipRepository.getById(Long.parseLong(createSpaceMarineRequest.getStarship()));
+        StarShip starShip = shipRepository.getById(Long.parseLong(createSpaceMarineRequest.getStarshipId()));
         if (starShip == null) throw new NotFoundException("Not found");
         spaceMarine.setStarship(starShip);
         return SpaceMarine.buildResponseDto(spaceMarineRepository.save(spaceMarine));
@@ -93,7 +93,7 @@ public class SpaceMarineServiceImpl implements SpaceMarineService {
         create.setCategory(request.getCategory());
         create.setCoordinates(request.getCoordinates());
         create.setChapter(request.getChapter());
-        create.setStarship(request.getStarship());
+        create.setStarshipId(request.getStarshipId());
         return create;
     }
 }

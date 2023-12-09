@@ -2,8 +2,7 @@ package com.example.mainservice.controllers;
 
 import com.example.mainservice.catalog.*;
 import com.example.mainservice.entity.AvailablePatternFields;
-import com.example.mainservice.exceptions.InvalidParamException;
-import com.example.mainservice.exceptions.NotFoundException;
+import com.example.mainservice.exceptions.*;
 import com.example.mainservice.services.interfaces.ExtraFunctionsService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class ExtraFunctionsController {
     @ResponsePayload
     public GetLowerAchievesResponse getLowerAchieves(@RequestPayload GetLowerAchievesRequest request) {
         if (StringUtils.isEmpty(request.getAchieve()) || StringUtils.isBlank(request.getAchieve())) {
-            throw new InvalidParamException("Validation failed");
+            throw new ServiceFaultException("Error", new ServiceFault("400", "Validation failed", ErrorBuildResponseUtils.getTime()));
         }
         GetLowerAchievesResponse response = new GetLowerAchievesResponse();
         response.setCount(extraFunctionsService.getLowerAchieves(request.getAchieve()));
@@ -39,23 +38,23 @@ public class ExtraFunctionsController {
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getByPatternRequest")
     @ResponsePayload
-    public GetSpaceMarinesResponse getByPattern(@RequestPayload GetByPatternRequest request) {
+    public GetByPatternResponse getByPattern(@RequestPayload GetByPatternRequest request) {
         if (StringUtils.isEmpty(request.getField())) {
-            throw new InvalidParamException("Validation failed");
+            throw new ServiceFaultException("Error", new ServiceFault("400", "Validation failed", ErrorBuildResponseUtils.getTime()));
         } else {
             List<String> values = Stream.of(AvailablePatternFields.values())
                     .map(Enum::toString)
                     .map(String::toLowerCase)
                     .collect(Collectors.toList());
             if (!values.contains(request.getField().toLowerCase())) {
-                throw new InvalidParamException("Validation failed");
+                throw new ServiceFaultException("Error", new ServiceFault("400", "Validation failed", ErrorBuildResponseUtils.getTime()));
             }
         }
         if (StringUtils.isEmpty(request.getValue())) {
-            throw new InvalidParamException("Validation failed");
+            throw new ServiceFaultException("Error", new ServiceFault("400", "Validation failed", ErrorBuildResponseUtils.getTime()));
         }
         List<SpaceMarineResponseDto> byPattern = extraFunctionsService.getByPattern(request.getField(), request.getValue());
-        GetSpaceMarinesResponse response = new GetSpaceMarinesResponse();
+        GetByPatternResponse response = new GetByPatternResponse();
         response.getSpaceMarineResponseDtos().addAll(byPattern);
         return response;
     }
@@ -65,7 +64,7 @@ public class ExtraFunctionsController {
     public GetUniqueHeartResponse getUniqueHeart() {
         GetUniqueHeartResponse response = extraFunctionsService.getUniqueHeartCount();
         if (response.getHearts().isEmpty()) {
-            throw new NotFoundException("Not found");
+            throw new ServiceFaultException("Error", new ServiceFault("404", "Not found", ErrorBuildResponseUtils.getTime()));
         }
         return response;
     }

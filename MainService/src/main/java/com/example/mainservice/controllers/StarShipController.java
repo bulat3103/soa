@@ -1,7 +1,11 @@
 package com.example.mainservice.controllers;
 
 import com.example.mainservice.catalog.CreateStarShipRequest;
-import com.example.mainservice.catalog.SimpleResponse;
+import com.example.mainservice.catalog.CreateStarShipResponse;
+import com.example.mainservice.exceptions.ErrorBuildResponseUtils;
+import com.example.mainservice.exceptions.InvalidParamException;
+import com.example.mainservice.exceptions.ServiceFault;
+import com.example.mainservice.exceptions.ServiceFaultException;
 import com.example.mainservice.services.interfaces.StarShipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -25,13 +29,17 @@ public class StarShipController {
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createStarShipRequest")
     @ResponsePayload
-    public SimpleResponse createStarShip(@RequestPayload CreateStarShipRequest request) {
+    public CreateStarShipResponse createStarShip(@RequestPayload CreateStarShipRequest request) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        starShipService.createStarShip(request);
-        SimpleResponse response = new SimpleResponse();
-        response.setCode("200");
-        response.setMessage("Starship created successfully");
-        response.setTime(ZonedDateTime.now(ZoneOffset.UTC).format(formatter));
-        return response;
+        try {
+            starShipService.createStarShip(request);
+            CreateStarShipResponse response = new CreateStarShipResponse();
+            response.setCode("200");
+            response.setMessage("Starship created successfully");
+            response.setTime(ZonedDateTime.now(ZoneOffset.UTC).format(formatter));
+            return response;
+        } catch (InvalidParamException e) {
+            throw new ServiceFaultException("Error", new ServiceFault("400", "Validation failed", ErrorBuildResponseUtils.getTime()));
+        }
     }
 }
